@@ -14,21 +14,21 @@ public class Mist {
     
     // MARK: - Fetching Items
     
-    static func fetch<T: Record>(recordOfType type:T.Type, withId id:RecordID, from:DatabaseScope) -> T? {
+    public static func fetch<T: Record>(recordOfType type:T.Type, withId id:RecordID, from:DatabaseScope) -> T? {
         
         let database = Mist.dataCache.databaseForScope(from)
         return database.fetch(recordOfType: type, withId: id)
         
     }
     
-    static func fetch<T: Record>(recordsOfType type:T.Type, matchingIds ids:Set<RecordID>, from:DatabaseScope) -> Results<T> {
+    public static func fetch<T: Record>(recordsOfType type:T.Type, matchingIds ids:Set<RecordID>, from:DatabaseScope) -> Results<T> {
         
         let database = Mist.dataCache.databaseForScope(from)
         return database.fetch(recordsOfType: type, matchingIds: ids)
         
     }
     
-    static func fetchAll<T: Record>(recordsOfType type:T.Type, from:DatabaseScope) -> Results<T> {
+    public static func fetchAll<T: Record>(recordsOfType type:T.Type, from:DatabaseScope) -> Results<T> {
         
         let database = Mist.dataCache.databaseForScope(from)
         return database.fetchAll(recordsOfType: type)
@@ -38,14 +38,14 @@ public class Mist {
     
     // MARK: - Finding Items
     
-    static func find<T: Record>(recordsOfType type:T.Type, filteredBy filter: @escaping ((T) -> Bool), within:DatabaseScope) -> Results<T> {
+    public static func find<T: Record>(recordsOfType type:T.Type, filteredBy filter: @escaping ((T) -> Bool), within:DatabaseScope) -> Results<T> {
         
         let database = Mist.dataCache.databaseForScope(within)
         return database.find(recordsOfType: type, filteredBy: filter)
         
     }
     
-    static func find<T: Record>(recordsOfType type:T.Type, where predicate:NSPredicate, within:DatabaseScope) -> Results<T> {
+    public static func find<T: Record>(recordsOfType type:T.Type, where predicate:NSPredicate, within:DatabaseScope) -> Results<T> {
         
         let database = Mist.dataCache.databaseForScope(within)
         return database.find(recordsOfType: type, where: predicate)
@@ -55,23 +55,23 @@ public class Mist {
     
     // MARK: - Modifying Items
     
-    static func add(_ record:Record) {
+    public static func add(_ record:Record) {
         add(Set([record]))
     }
     
-    static func add(_ records:Set<Record>) {
+    public static func add(_ records:Set<Record>) {
         modify(records, withChangeType: .addition)
     }
     
-    static func remove(_ record:Record) {
+    public static func remove(_ record:Record) {
         remove(Set([record]))
     }
     
-    static func remove(_ records:Set<Record>) {
+    public static func remove(_ records:Set<Record>) {
         modify(records, withChangeType: .removal)
     }
     
-    static func write(_ closure: @escaping (() -> Void)) {
+    public static func write(_ closure: @escaping (() -> Void)) {
         
         dispatchQueue.async {
             
@@ -88,7 +88,7 @@ public class Mist {
     
     // MARK: - Subscribing to Changes
     
-    static func addNotificationBlock(forScope scope:DatabaseScope, block: @escaping (() -> Void)) -> Token {
+    public static func addNotificationBlock(forScope scope:DatabaseScope, block: @escaping (() -> Void)) -> Token {
         
         let database = Mist.dataCache.databaseForScope(scope)
         return database.addNotificationBlock(block)
