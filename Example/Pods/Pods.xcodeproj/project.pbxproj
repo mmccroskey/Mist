@@ -11,6 +11,7 @@
 		3932C21FC52BCD934303AD92071B1757 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		79EA0F69CCA127C60433BAF0F651E058 /* Pods-Mist_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA466325D804B41449A3AF49BE24B42 /* Pods-Mist_Example-dummy.m */; };
 		7DA59D18270866D95CCB498A2CBD5BDF /* Pods-Mist_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 168B83E85292A6C82E85146D740DFCDB /* Pods-Mist_Tests-dummy.m */; };
+		8DEF4F501E7DB3FC001F5AB0 /* Messenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF4F4F1E7DB3FC001F5AB0 /* Messenger.swift */; };
 		9011059F12B0902505D9D3C36D2B750D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		968F534AAD5FDC08FEDAEF915A17B340 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		A3C6670FEB376F1E4CDFD7906934F2D1 /* Mist-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 88E1E40A6C3651A7ABB8ABB9B2B16C45 /* Mist-dummy.m */; };
@@ -44,6 +45,7 @@
 		825CCE739AF082ECA259F2FE19A7D426 /* Pods-Mist_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Mist_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		88E1E40A6C3651A7ABB8ABB9B2B16C45 /* Mist-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Mist-dummy.m"; sourceTree = "<group>"; };
 		8CC9450AA836330025B490B3EF6A480C /* Pods-Mist_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Mist_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		8DEF4F4F1E7DB3FC001F5AB0 /* Messenger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messenger.swift; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9BA466325D804B41449A3AF49BE24B42 /* Pods-Mist_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Mist_Example-dummy.m"; sourceTree = "<group>"; };
 		9CB85195C02BEFD13727E40E33F051C2 /* Mist.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Mist.xcconfig; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 		D6313B3901C9936B23BD4011D4624BE1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8DEF4F4F1E7DB3FC001F5AB0 /* Messenger.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3C6670FEB376F1E4CDFD7906934F2D1 /* Mist-dummy.m in Sources */,
+				8DEF4F501E7DB3FC001F5AB0 /* Messenger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
