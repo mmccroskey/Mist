@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		06B20EE48AF69E804561DC1D /* Pods_Mist_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C77155567F2C2D6912EC6D /* Pods_Mist_Tests.framework */; };
-		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
-		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
-		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
-		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		8DEF4F5A1E7DB6D8001F5AB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF4F521E7DB6D8001F5AB0 /* AppDelegate.swift */; };
+		8DEF4F5B1E7DB6D8001F5AB0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DEF4F531E7DB6D8001F5AB0 /* LaunchScreen.xib */; };
+		8DEF4F5C1E7DB6D8001F5AB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DEF4F551E7DB6D8001F5AB0 /* Main.storyboard */; };
+		8DEF4F5D1E7DB6D8001F5AB0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DEF4F571E7DB6D8001F5AB0 /* Images.xcassets */; };
+		8DEF4F5F1E7DB6D8001F5AB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF4F591E7DB6D8001F5AB0 /* ViewController.swift */; };
 		B7F3772E454DAEC43EA7BE9C /* Pods_Mist_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C07E466BFF329072FD2D231 /* Pods_Mist_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,18 +32,18 @@
 		0C07E466BFF329072FD2D231 /* Pods_Mist_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mist_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		13C77155567F2C2D6912EC6D /* Pods_Mist_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mist_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD01AFB9204008FA782 /* Mist_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mist_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Mist_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mist_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		63BC90F94E5790715949A0A9 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6EF8C7E905A47C01655D58E3 /* Pods-Mist_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mist_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mist_Example/Pods-Mist_Example.release.xcconfig"; sourceTree = "<group>"; };
 		8B7D83C826D82DFA3899CCD9 /* Pods-Mist_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mist_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mist_Tests/Pods-Mist_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		8DEF4F521E7DB6D8001F5AB0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8DEF4F541E7DB6D8001F5AB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		8DEF4F561E7DB6D8001F5AB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8DEF4F571E7DB6D8001F5AB0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		8DEF4F581E7DB6D8001F5AB0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DEF4F591E7DB6D8001F5AB0 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		912758F96DB27D2DA6822AC8 /* Pods-Mist_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mist_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mist_Tests/Pods-Mist_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		B0BEA163885DCEAD3BAACD53 /* Pods-Mist_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mist_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mist_Example/Pods-Mist_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E3720D36407A31BC655EAFC1 /* Mist.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Mist.podspec; path = ../Mist.podspec; sourceTree = "<group>"; };
@@ -72,8 +72,8 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				8DEF4F511E7DB6D8001F5AB0 /* TinyTask (iOS) */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
-				607FACD21AFB9204008FA782 /* Example for Mist */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				755E2D7C7463D50F51224B64 /* Pods */,
@@ -88,28 +88,6 @@
 				607FACE51AFB9204008FA782 /* Mist_Tests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		607FACD21AFB9204008FA782 /* Example for Mist */ = {
-			isa = PBXGroup;
-			children = (
-				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				607FACD91AFB9204008FA782 /* Main.storyboard */,
-				607FACDC1AFB9204008FA782 /* Images.xcassets */,
-				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
-				607FACD31AFB9204008FA782 /* Supporting Files */,
-			);
-			name = "Example for Mist";
-			path = Mist;
-			sourceTree = "<group>";
-		};
-		607FACD31AFB9204008FA782 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				607FACD41AFB9204008FA782 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		607FACE81AFB9204008FA782 /* Tests */ = {
@@ -148,6 +126,19 @@
 				912758F96DB27D2DA6822AC8 /* Pods-Mist_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		8DEF4F511E7DB6D8001F5AB0 /* TinyTask (iOS) */ = {
+			isa = PBXGroup;
+			children = (
+				8DEF4F521E7DB6D8001F5AB0 /* AppDelegate.swift */,
+				8DEF4F531E7DB6D8001F5AB0 /* LaunchScreen.xib */,
+				8DEF4F551E7DB6D8001F5AB0 /* Main.storyboard */,
+				8DEF4F571E7DB6D8001F5AB0 /* Images.xcassets */,
+				8DEF4F581E7DB6D8001F5AB0 /* Info.plist */,
+				8DEF4F591E7DB6D8001F5AB0 /* ViewController.swift */,
+			);
+			path = "TinyTask (iOS)";
 			sourceTree = "<group>";
 		};
 		B626BA748E729F183AD949CF /* Frameworks */ = {
@@ -215,6 +206,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = KWJD3PR5B4;
 						LastSwiftMigration = 0820;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -248,9 +240,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
-				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
-				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				8DEF4F5D1E7DB6D8001F5AB0 /* Images.xcassets in Resources */,
+				8DEF4F5B1E7DB6D8001F5AB0 /* LaunchScreen.xib in Resources */,
+				8DEF4F5C1E7DB6D8001F5AB0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,8 +353,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				8DEF4F5F1E7DB6D8001F5AB0 /* ViewController.swift in Sources */,
+				8DEF4F5A1E7DB6D8001F5AB0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,20 +377,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
+		8DEF4F531E7DB6D8001F5AB0 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				607FACDA1AFB9204008FA782 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				607FACDF1AFB9204008FA782 /* Base */,
+				8DEF4F541E7DB6D8001F5AB0 /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		8DEF4F551E7DB6D8001F5AB0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DEF4F561E7DB6D8001F5AB0 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -497,7 +489,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = Mist/Info.plist;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = KWJD3PR5B4;
+				INFOPLIST_FILE = "$(SRCROOT)/TinyTask (iOS)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -512,7 +506,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = Mist/Info.plist;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = KWJD3PR5B4;
+				INFOPLIST_FILE = "$(SRCROOT)/TinyTask (iOS)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -525,6 +521,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B7D83C826D82DFA3899CCD9 /* Pods-Mist_Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -545,6 +542,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 912758F96DB27D2DA6822AC8 /* Pods-Mist_Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
