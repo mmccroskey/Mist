@@ -1,5 +1,11 @@
 PODS:
-  - Mist (0.1.0)
+  - Mist (0.1.0):
+    - RealmSwift (~> 2.4)
+  - Realm (2.4.3):
+    - Realm/Headers (= 2.4.3)
+  - Realm/Headers (2.4.3)
+  - RealmSwift (2.4.3):
+    - Realm (= 2.4.3)
 
 DEPENDENCIES:
   - Mist (from `../`)
@@ -9,8 +15,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Mist: 255ea686d5aaaad7ae0470102de468b7873de2d0
+  Mist: 903d5e5e22b5d056d8f26855f3ba5b42d1a5a159
+  Realm: e08d60b0048ccccd3949c8c28a92c4db5712d7e9
+  RealmSwift: 30d49739ccb3385d201242736ca4dda56aec9dfc
 
-PODFILE CHECKSUM: 13e78c5f75135050d3ec0ddae6c76056e33fb01f
+PODFILE CHECKSUM: 893f4a27371b77b298e45b3ab80308604ca68513
 
 COCOAPODS: 1.0.0

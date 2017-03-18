@@ -1,22 +1,29 @@
 {
   "name": "Mist",
   "version": "0.1.0",
-  "summary": "A short description of Mist.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Matthew McCroskey/Mist",
+  "summary": "An adapter for CloudKit that supports local persistence, custom typed models, true relationships, & automatic sync.",
+  "description": "Mist was created because **CloudKit is great, but it has some fundamental shortcomings**:\n\n* Although it lets you sync records between cloud and device, it doesn't let you save them locally once they've arrived;\n* Although it has a flexible approach to data modelling, that flexibility makes it verbose and error-prone to use;\n* Although it has incredible features for synchronization, they're arcane & opt-in rather than obvious & automatic.\n\nMist seeks to solve these problems by directly supporting **local persistence**, by requiring the use of **typed models with true relationships**, & by providing **automatic synchronization**.",
+  "homepage": "https://github.com/mmccroskey/Mist",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "Matthew McCroskey": "matthew.mccroskey@gmail.com"
+    "Matthew McCroskey": "mist@crazytaps.biz"
   },
   "source": {
     "git": "https://github.com/Matthew McCroskey/Mist.git",
     "tag": "0.1.0"
   },
+  "social_media_url": "https://twitter.com/mmccroskey",
   "platforms": {
-    "ios": "8.0"
+    "ios": "10.0"
   },
-  "source_files": "Mist/Classes/**/*"
+  "source_files": "Mist/Classes/**/*",
+  "frameworks": "CloudKit",
+  "dependencies": {
+    "RealmSwift": [
+      "~> 2.4"
+    ]
+  }
 }
