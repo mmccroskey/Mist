@@ -13,7 +13,6 @@
 		7DA59D18270866D95CCB498A2CBD5BDF /* Pods-Mist_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 168B83E85292A6C82E85146D740DFCDB /* Pods-Mist_Tests-dummy.m */; };
 		9011059F12B0902505D9D3C36D2B750D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		968F534AAD5FDC08FEDAEF915A17B340 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
-		9FAA11DB91B390B0557AC0605FAD340B /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED516B6C8C3329AC7EB708421B98A65 /* ReplaceMe.swift */; };
 		A3C6670FEB376F1E4CDFD7906934F2D1 /* Mist-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 88E1E40A6C3651A7ABB8ABB9B2B16C45 /* Mist-dummy.m */; };
 		D7F8453DEE13DBFBC28831B87135C133 /* Mist-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BDE7707D6D97CE18B4F2EC97D4E80292 /* Mist-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D96A44AEC21D580CD11E3D378E92124D /* Pods-Mist_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E7D9F81F802FF482AB357203C18575E4 /* Pods-Mist_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -51,7 +50,6 @@
 		9CD0E06F2A717E735939F0BDCDBFA134 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A27644F1D76500B4773B5B578114E412 /* Pods-Mist_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Mist_Tests.modulemap"; sourceTree = "<group>"; };
 		AD1628F45AF92C81DA0C75CF386BE1E7 /* Pods-Mist_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Mist_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		AED516B6C8C3329AC7EB708421B98A65 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReplaceMe.swift; sourceTree = "<group>"; };
 		B378603C8412EB40D7C3468F18B19802 /* Pods-Mist_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Mist_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		BDE7707D6D97CE18B4F2EC97D4E80292 /* Mist-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Mist-umbrella.h"; sourceTree = "<group>"; };
 		BEA58AEA8CFE6DE16133178E46592018 /* Pods-Mist_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Mist_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -217,7 +215,6 @@
 		D6313B3901C9936B23BD4011D4624BE1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				AED516B6C8C3329AC7EB708421B98A65 /* ReplaceMe.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -354,7 +351,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3C6670FEB376F1E4CDFD7906934F2D1 /* Mist-dummy.m in Sources */,
-				9FAA11DB91B390B0557AC0605FAD340B /* ReplaceMe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
