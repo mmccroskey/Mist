@@ -23,7 +23,7 @@ open class Record : Object {
     
     // MARK: Initializers
     
-    convenience init(databaseScope: DatabaseScope) {
+    public convenience init(databaseScope: DatabaseScope) {
         
         self.init()
         
@@ -66,7 +66,7 @@ open class Record : Object {
         
     }
     
-    convenience init(parent: Record) {
+    public convenience init(parent: Record) {
         
         self.init()
         
