@@ -40,6 +40,6 @@ Mist seeks to solve these problems by directly supporting **local persistence**,
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'CloudKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'RealmSwift', '~> 2.4'
 
 end
