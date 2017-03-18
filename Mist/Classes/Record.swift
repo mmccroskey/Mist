@@ -15,7 +15,7 @@ public typealias RecordValue = CKRecordValue
 public typealias RelationshipDeleteBehavior = CKReferenceAction
 
 
-public class Record : Object {
+open class Record : Object {
     
     
     // MARK: - PUBLIC -
@@ -92,17 +92,17 @@ public class Record : Object {
     
     // MARK: - Properties
     
-    fileprivate(set) dynamic var id: RecordID = UUID().uuidString
+    open fileprivate(set) dynamic var id: RecordID = UUID().uuidString
     
-    func propertyKeys() -> Set<String> {
+    open func propertyKeys() -> Set<String> {
         return Set([])
     }
     
-    func relationshipKeys() -> Set<String> {
+    open func relationshipKeys() -> Set<String> {
         return Set([])
     }
     
-    func assetKeys() -> Set<String> {
+    open func assetKeys() -> Set<String> {
         return Set([])
     }
     
