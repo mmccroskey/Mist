@@ -489,6 +489,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9CB85195C02BEFD13727E40E33F051C2 /* Mist.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -520,6 +521,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9CB85195C02BEFD13727E40E33F051C2 /* Mist.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
