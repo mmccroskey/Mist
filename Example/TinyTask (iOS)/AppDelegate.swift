@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let messenger = Messenger("Hello World!")
         messenger.printMessage()
+        messenger.printPluralMessage()
         
     }
 

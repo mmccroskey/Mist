@@ -20,4 +20,8 @@ public class Messenger {
         print(message)
     }
     
+    public func printPluralMessage() {
+        print(message.pluralize())
+    }
+    
 }
