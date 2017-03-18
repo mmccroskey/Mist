@@ -117,7 +117,6 @@
 		8BF63012196807C141DF1D8037EEEB88 /* ObjectiveCSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E1D40BABA7C3FC39A666D3FA3ECD8F /* ObjectiveCSupport.swift */; };
 		8D9879211E7DF366007204DD /* Pluralize.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D98791E1E7DF366007204DD /* Pluralize.h */; };
 		8D9879221E7DF366007204DD /* Pluralize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98791F1E7DF366007204DD /* Pluralize.swift */; };
-		8D9879231E7DF366007204DD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879201E7DF366007204DD /* README.md */; };
 		8D98792B1E7DF686007204DD /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879241E7DF686007204DD /* Database.swift */; };
 		8D98792C1E7DF686007204DD /* DataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879251E7DF686007204DD /* DataCache.swift */; };
 		8D98792D1E7DF686007204DD /* Mist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879261E7DF686007204DD /* Mist.swift */; };
@@ -453,7 +452,6 @@
 		8D98791D1E7DF366007204DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D98791E1E7DF366007204DD /* Pluralize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pluralize.h; sourceTree = "<group>"; };
 		8D98791F1E7DF366007204DD /* Pluralize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pluralize.swift; sourceTree = "<group>"; };
-		8D9879201E7DF366007204DD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8D9879241E7DF686007204DD /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		8D9879251E7DF686007204DD /* DataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCache.swift; sourceTree = "<group>"; };
 		8D9879261E7DF686007204DD /* Mist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mist.swift; sourceTree = "<group>"; };
@@ -856,7 +854,6 @@
 			children = (
 				8D98791B1E7DF366007204DD /* LICENSE */,
 				8D98791C1E7DF366007204DD /* Pluralize */,
-				8D9879201E7DF366007204DD /* README.md */,
 			);
 			path = Pluralize.swift;
 			sourceTree = "<group>";
@@ -1318,7 +1315,6 @@
 				3CC883FEDFD74DD840E570831220599F /* Messenger.swift in Sources */,
 				8D98792D1E7DF686007204DD /* Mist.swift in Sources */,
 				8D98792C1E7DF686007204DD /* DataCache.swift in Sources */,
-				8D9879231E7DF366007204DD /* README.md in Sources */,
 				8D98792B1E7DF686007204DD /* Database.swift in Sources */,
 				EBDF02F9E16705387603FF3F0685BB88 /* Mist-dummy.m in Sources */,
 				8D98792F1E7DF686007204DD /* PublicDatabase.swift in Sources */,
