@@ -1,0 +1,16 @@
+PODS:
+  - Mist (0.1.0)
+
+DEPENDENCIES:
+  - Mist (from `../`)
+
+EXTERNAL SOURCES:
+  Mist:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Mist: 255ea686d5aaaad7ae0470102de468b7873de2d0
+
+PODFILE CHECKSUM: 13e78c5f75135050d3ec0ddae6c76056e33fb01f
+
+COCOAPODS: 1.0.0
