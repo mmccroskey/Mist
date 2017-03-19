@@ -215,12 +215,76 @@ internal class Database {
                 
                 try writingRealm.write {
                     
+                    // MARK: Record Zone Changes
+                    
+                    for idOfRecordZoneToDelete in self.idsOfRecordZonesToDeleteLocally {
+                        
+                        if let extantRecordZoneToDelete = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: idOfRecordZoneToDelete) {
+                            
+                            // TODO: First, cascade-delete all the Records in this Record Zone
+
+                            writingRealm.delete(extantRecordZoneToDelete)
+                            self.idsOfRecordZonesWithUnpushedDeletions.insert(idOfRecordZoneToDelete)
+
+                        }
+
+                    }
+                    self.idsOfRecordZonesToDeleteLocally = []
+
+                    for recordZoneToModify in self.recordZonesToModifyLocally {
+
+                        let recordZoneID = recordZoneToModify.combinedIdentifier
+
+                        let recordZoneToSave: RecordZone
+                        if let extantRecordZone = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: recordZoneID) {
+                            recordZoneToSave = extantRecordZone
+                        } else {
+                            recordZoneToSave = RecordZone(zoneName: recordZoneToModify.zoneName, database: recordZoneToModify.database)
+                        }
+                        
+                        recordZoneToSave.zoneName = recordZoneToModify.zoneName
+                        recordZoneToSave.ownerName = recordZoneToModify.ownerName
+                        
+                        writingRealm.add(recordZoneToSave)
+                        self.idsOfRecordZonesWithUnpushedChanges.insert(recordZoneToModify.backingRecordZoneID)
+                        
+                    }
+                    self.recordZonesToModifyLocally = []
+                    
+                    // MARK: Record Changes
+                    
+                    // Ensure we have a default Record Zone for the Public Database
+                    if databaseScope == .public {
+                        
+                        if writingRealm.object(ofType: RecordZone.self, forPrimaryKey: "default") == nil {
+                            
+                            let defaultRecordZone = RecordZone(zoneName: "default", database: self)
+                            writingRealm.add(defaultRecordZone)
+                            
+                        }
+                        
+                    }
+                    
                     for idOfRecordToDelete in self.idsOfRecordsToDeleteLocally {
                         
                         if let extantRecordToDelete = writingRealm.object(ofType: Record.self, forPrimaryKey: idOfRecordToDelete) {
                             
+                            // TODO: Cascade delete this Record's children
+                            
+                            let recordZoneId = extantRecordToDelete.recordZone?.backingRecordZoneID
+                            
                             writingRealm.delete(extantRecordToDelete)
                             self.idsOfRecordsWithUnpushedDeletions.insert(idOfRecordToDelete)
+                            
+                            // TODO: Get a reference to this Record's RecordZone
+                            let filter: ((Record) -> Bool) = { (record)
+                                
+                                if let recordZoneId = record.recordZone?.
+                                
+                            }
+                            if let recordZoneId = extantRecordToDelete.recordZone?.backingRecordZoneID,
+                                let recordZone = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: recordZoneId) {}
+                            //                                let containedRecords = writingRealm.objects(Record.self).filter({  })
                             
                         }
                         
@@ -237,9 +301,17 @@ internal class Database {
                         } else {
                             
                             if let parent = recordToModify.parent {
+                                
                                 recordToSave = Record(parent: parent)
+                                
                             } else {
+                                
+                                let containingRecordZone = RecordZone(zoneName: UUID().uuidString, database: self)
+                                writingRealm.add(containingRecordZone)
+                                
                                 recordToSave = Record(databaseScope: recordToModify.databaseScope)
+                                recordToSave.recordZone = containingRecordZone
+                                
                             }
                             
                         }
