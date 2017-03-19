@@ -35,22 +35,6 @@ open class Record : Object {
         
         self.parent = nil
         
-        if databaseScope == .public {
-            
-            let publicDatabase = Mist.dataCache.databaseForScope(.public)
-            self.recordZone = publicDatabase.defaultRecordZone
-            
-        } else {
-            
-            let database = Mist.dataCache.databaseForScope(databaseScope)
-            let recordZone = RecordZone(zoneName: UUID().uuidString, database: database)
-            database.addRecordZone(recordZone)
-            database.processRecordZoneChanges()
-            
-            self.recordZone = recordZone
-            
-        }
-        
         let recordType = String(describing: type(of: self)).pluralize()
         
         guard let recordZone = self.recordZone else {

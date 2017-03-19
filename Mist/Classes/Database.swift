@@ -79,15 +79,12 @@ internal class Database {
             
             realm = try Realm(configuration: config)
             
-            if realm.object(ofType: RecordZone.self, forPrimaryKey: "default") == nil {
-                try realm.write { self.realm.add(RecordZone(database: self)) }
-            }
-            
         } catch let error {
             
             fatalError("\(error)")
             
         }
+
         
     }
     
