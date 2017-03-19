@@ -38,8 +38,7 @@ internal class Database {
         
         self.databaseScope = databaseScope
         
-        self.recordZoneDispatchQueue = DispatchQueue(label: "com.Mist.database.recordZone.\(databaseScope)")
-        self.recordDispatchQueue = DispatchQueue(label: "com.Mist.database.record.\(databaseScope)")
+        self.dispatchQueue = DispatchQueue(label: "com.Mist.database.record.\(databaseScope)")
         
         let fileName: String
         
@@ -182,7 +181,7 @@ internal class Database {
     
     func addRecord(_ record:Record) {
         
-        recordDispatchQueue.sync {
+        dispatchQueue.sync {
             
             if !(idsOfRecordsToDeleteLocally.contains(record.id)) {
                 recordsToModifyLocally.insert(record)
@@ -197,7 +196,7 @@ internal class Database {
     
     func removeRecord(_ record:Record) {
         
-        recordDispatchQueue.sync {
+        dispatchQueue.sync {
             
             recordsToModifyLocally.remove(record)
             idsOfRecordsToDeleteLocally.insert(record.id)
@@ -211,7 +210,7 @@ internal class Database {
     
     func processRecordChanges() {
         
-        recordDispatchQueue.sync {
+        dispatchQueue.sync {
             
             do {
                 
@@ -279,8 +278,7 @@ internal class Database {
     
     private let databaseScope: DatabaseScope
     
-    private let recordZoneDispatchQueue: DispatchQueue!
-    private let recordDispatchQueue: DispatchQueue!
+    private let dispatchQueue: DispatchQueue!
     
     private var idsOfRecordZonesToDeleteLocally: Set<CKRecordZoneID> = []
     private var recordZonesToModifyLocally: Set<RecordZone> = []
