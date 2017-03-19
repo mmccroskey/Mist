@@ -17,14 +17,6 @@ internal class RecordZone : Object {
     
     // MARK: - Initializers
     
-    convenience init(database: Database) {
-        
-        self.init()
-        
-        self.database = database
-        
-    }
-    
     convenience init(zoneName: String, database: Database) {
         
         self.init()
