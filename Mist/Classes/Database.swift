@@ -269,20 +269,19 @@ internal class Database {
                             
                             // TODO: Cascade delete this Record's children
                             
-                            let recordZoneId = extantRecordToDelete.recordZone?.backingRecordZoneID
+                            let recordZoneId = extantRecordToDelete.recordZone?.combinedIdentifier
                             
                             writingRealm.delete(extantRecordToDelete)
                             self.idsOfRecordsWithUnpushedDeletions.insert(idOfRecordToDelete)
                             
-                            // TODO: Get a reference to this Record's RecordZone
-                            let filter: ((Record) -> Bool) = { (record)
-                                
-                                if let recordZoneId = record.recordZone?.
-                                
+                            // Delete the parent Record Zone too if it's empty
+                            guard let recordZone = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: recordZoneId) else { continue }
+                            let predicate = NSPredicate(format: "recordZone == %@", recordZone)
+                            let recordsInRecordZone = writingRealm.objects(Record.self).filter(predicate)
+                            let recordZoneHasNoRecords = (recordsInRecordZone.count == 0)
+                            if recordZoneHasNoRecords {
+                                writingRealm.delete(recordZone)
                             }
-                            if let recordZoneId = extantRecordToDelete.recordZone?.backingRecordZoneID,
-                                let recordZone = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: recordZoneId) {}
-                            //                                let containedRecords = writingRealm.objects(Record.self).filter({  })
                             
                         }
                         
