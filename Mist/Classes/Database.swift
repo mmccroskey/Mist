@@ -108,10 +108,6 @@ internal class Database {
         
     }
     
-    var defaultRecordZone: RecordZone {
-        return realm.object(ofType: RecordZone.self, forPrimaryKey: "default")!
-    }
-    
     var recordZones: Results<RecordZone> {
         return realm.objects(RecordZone.self)
     }
@@ -256,9 +252,11 @@ internal class Database {
                     // Ensure we have a default Record Zone for the Public Database
                     if databaseScope == .public {
                         
-                        if writingRealm.object(ofType: RecordZone.self, forPrimaryKey: "default") == nil {
+                        let defaultCombinedIdentifier = RecordZone.defaultCombinedIdentifier(forDatabase: self)
+                        
+                        if writingRealm.object(ofType: RecordZone.self, forPrimaryKey: defaultCombinedIdentifier) == nil {
                             
-                            let defaultRecordZone = RecordZone(zoneName: "default", database: self)
+                            let defaultRecordZone = RecordZone(zoneName: defaultCombinedIdentifier, database: self)
                             writingRealm.add(defaultRecordZone)
                             
                         }

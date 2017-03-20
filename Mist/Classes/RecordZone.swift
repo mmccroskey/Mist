@@ -57,6 +57,13 @@ internal class RecordZone : Object {
     let records = LinkingObjects(fromType: Record.self, property: "recordZone")
     
     
+    // MARK: - Functions
+    
+    static func defaultCombinedIdentifier(forDatabase database:Database) -> String {
+        return "\(database.scopeName)+default+\(CKCurrentUserDefaultName)"
+    }
+    
+    
     // MARK: - Private Properties
     
     dynamic var zoneName: String = "default" {
