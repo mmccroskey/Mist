@@ -35,19 +35,6 @@ open class Record : Object {
         
         self.parent = nil
         
-        let recordType = String(describing: type(of: self)).pluralize()
-        
-        guard let recordZone = self.recordZone else {
-            fatalError("Record Zone should always be set on Record by this point.")
-        }
-        
-        let zoneID = recordZone.backingRecordZoneID
-        let recordID = CKRecordID(recordName: self.id, zoneID: zoneID)
-        
-        let backingRemoteRecord = CKRecord(recordType: recordType, recordID: recordID)
-        self.saveSystemFields(ofRemoteRecord: backingRemoteRecord)
-        
-        
     }
     
     public convenience init(parent: Record) {
@@ -57,19 +44,6 @@ open class Record : Object {
         self.databaseScope = parent.databaseScope
         
         self.parent = parent
-        self.recordZone = parent.recordZone
-        
-        let recordType = String(describing: type(of: self)).pluralize()
-        
-        guard let recordZone = self.recordZone else {
-            fatalError("Record Zone should always be set on Record by this point.")
-        }
-        
-        let zoneID = recordZone.backingRecordZoneID
-        let recordID = CKRecordID(recordName: self.id, zoneID: zoneID)
-        
-        let backingRemoteRecord = CKRecord(recordType: recordType, recordID: recordID)
-        self.saveSystemFields(ofRemoteRecord: backingRemoteRecord)
         
     }
     
@@ -97,7 +71,8 @@ open class Record : Object {
     
     // MARK: - Relationships
     
-    dynamic var parent: Record? = nil
+    public dynamic var parent: Record? = nil
+    public let children = LinkingObjects(fromType: Record.self, property: "parent")
     
     
     // MARK: - INTERNAL
@@ -184,6 +159,59 @@ open class Record : Object {
     
     
     // MARK: - Functions
+    
+    internal func rootRecord() -> Record {
+        
+        guard let parent = parent else {
+            return self
+        }
+        
+        return parent.rootRecord()
+        
+    }
+    
+    internal func configureRecordZone(inRealm realm:Realm) {
+        
+        if let parent = self.parent {
+            
+            guard let parentRecordZone = parent.recordZone else {
+                
+                fatalError(
+                    "You've called configureRecordZone on a Record whose parent has no record zone, which is not allowed. " +
+                    "To avoid this, call configureRecordZone on a root record (one with no parent) first, then on its children."
+                )
+                
+            }
+            
+            recordZone = parentRecordZone
+            
+        } else {
+            
+            let database = Mist.dataCache.databaseForScope(databaseScope)
+            
+            if databaseScope == .public {
+                
+                let defaultRecordZoneIdentifier = RecordZone.defaultCombinedIdentifier(forDatabase: database)
+                
+                guard let defaultRecordZone = realm.object(ofType: RecordZone.self, forPrimaryKey: defaultRecordZoneIdentifier) else {
+                    fatalError("The public database should always have a default Record Zone.")
+                }
+                
+                recordZone = defaultRecordZone
+                
+                
+            } else {
+                
+                let containingRecordZone = RecordZone(zoneName: UUID().uuidString, database: database)
+                realm.add(containingRecordZone)
+                
+                recordZone = containingRecordZone
+                
+            }
+            
+        }
+        
+    }
     
     /**
      Produce the CKRecord-equivalent of the Record

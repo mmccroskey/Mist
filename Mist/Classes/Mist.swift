@@ -112,9 +112,7 @@ public class Mist {
         
         for record in records {
             
-            guard let database = record.recordZone?.database else {
-                fatalError("Every Record should have a Record Zone, which should have a Database.")
-            }
+            let database = Mist.dataCache.databaseForScope(record.databaseScope)
             
             switch changeType {
                 

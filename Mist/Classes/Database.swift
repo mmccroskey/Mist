@@ -124,6 +124,58 @@ internal class Database {
     }
     
     
+    // MARK: - Working with Record Zones
+    
+    
+    func addRecordZone(_ recordZone:RecordZone) {
+        
+        dispatchQueue.sync {
+            
+            if !(idsOfRecordZonesToDeleteLocally.contains(recordZone.backingRecordZoneID)) {
+                recordZonesToModifyLocally.insert(recordZone)
+            }
+            
+        }
+        
+    }
+    
+    func removeRecordZone(_ recordZone:RecordZone) {
+        
+        dispatchQueue.sync {
+            
+            do {
+                
+                let tempRealm = try Realm(configuration: realmConfiguration)
+
+                let predicate = NSPredicate(format: "recordZone == %@", recordZone)
+                let containedRecords = tempRealm.objects(Record.self).filter(predicate)
+                let containedRecordsIds = containedRecords.map({ $0.id })
+                
+                var recordsToRemove: [Record] = []
+                for record in recordsToModifyLocally {
+                    
+                    if containedRecordsIds.contains(record.id) {
+                        recordsToRemove.append(record)
+                    }
+                    
+                }
+                recordsToModifyLocally = recordsToModifyLocally.subtracting(Set(recordsToRemove))
+                
+                idsOfRecordsToDeleteLocally = idsOfRecordsToDeleteLocally.subtracting(Set(containedRecordsIds))
+                
+            } catch let error {
+                fatalError("\(error)")
+            }
+            
+            
+            recordZonesToModifyLocally.remove(recordZone)
+            idsOfRecordZonesToDeleteLocally.insert(recordZone.backingRecordZoneID)
+            
+        }
+        
+    }
+    
+    
     // MARK: - Working with Records
     
     
@@ -211,13 +263,16 @@ internal class Database {
                 
                 try writingRealm.write {
                     
+                    
                     // MARK: Record Zone Changes
                     
                     for idOfRecordZoneToDelete in self.idsOfRecordZonesToDeleteLocally {
                         
                         if let extantRecordZoneToDelete = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: idOfRecordZoneToDelete) {
                             
-                            // TODO: First, cascade-delete all the Records in this Record Zone
+                            let predicate = NSPredicate(format: "recordZone == %@", extantRecordZoneToDelete)
+                            let containedRecords = writingRealm.objects(Record.self).filter(predicate)
+                            writingRealm.delete(containedRecords)
 
                             writingRealm.delete(extantRecordZoneToDelete)
                             self.idsOfRecordZonesWithUnpushedDeletions.insert(idOfRecordZoneToDelete)
@@ -247,7 +302,18 @@ internal class Database {
                     }
                     self.recordZonesToModifyLocally = []
                     
+                    
                     // MARK: Record Changes
+                    
+                    func performCascadingAction(onRecord record:Record, action:((Record) -> Void)) {
+                        
+                        for child in record.children {
+                            performCascadingAction(onRecord: child, action: action)
+                        }
+                        
+                        action(record)
+                        
+                    }
                     
                     // Ensure we have a default Record Zone for the Public Database
                     if databaseScope == .public {
@@ -267,12 +333,14 @@ internal class Database {
                         
                         if let extantRecordToDelete = writingRealm.object(ofType: Record.self, forPrimaryKey: idOfRecordToDelete) {
                             
-                            // TODO: Cascade delete this Record's children
-                            
                             let recordZoneId = extantRecordToDelete.recordZone?.combinedIdentifier
                             
-                            writingRealm.delete(extantRecordToDelete)
-                            self.idsOfRecordsWithUnpushedDeletions.insert(idOfRecordToDelete)
+                            performCascadingAction(onRecord: extantRecordToDelete) { record in
+                                
+                                writingRealm.delete(record)
+                                self.idsOfRecordsWithUnpushedDeletions.insert(record.id)
+                                
+                            }
                             
                             // Delete the parent Record Zone too if it's empty
                             guard let recordZone = writingRealm.object(ofType: RecordZone.self, forPrimaryKey: recordZoneId) else { continue }
@@ -290,6 +358,9 @@ internal class Database {
 
                     for recordToModify in self.recordsToModifyLocally {
                         
+                        // Ensure that the full tree of records that includes this record has their Record Zones set
+                        performCascadingAction(onRecord: recordToModify.rootRecord()) { $0.configureRecordZone(inRealm: writingRealm) }
+                        
                         let recordID = recordToModify.id
                         
                         let recordToSave: Record
@@ -298,17 +369,9 @@ internal class Database {
                         } else {
                             
                             if let parent = recordToModify.parent {
-                                
                                 recordToSave = Record(parent: parent)
-                                
                             } else {
-                                
-                                let containingRecordZone = RecordZone(zoneName: UUID().uuidString, database: self)
-                                writingRealm.add(containingRecordZone)
-                                
                                 recordToSave = Record(databaseScope: recordToModify.databaseScope)
-                                recordToSave.recordZone = containingRecordZone
-                                
                             }
                             
                         }
