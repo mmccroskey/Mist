@@ -115,6 +115,7 @@
 		8A646E48143C4F5995A735062BC4C7C6 /* RLMListBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = C45B080ABB4FE9807F8154F0F20367AD /* RLMListBase.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
 		8B3653216EA87BD02AF1841A19933FC8 /* RLMPlatform.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = CB58403FDC92D1505DD43BB01787B70A /* RLMPlatform.h */; };
 		8BF63012196807C141DF1D8037EEEB88 /* ObjectiveCSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E1D40BABA7C3FC39A666D3FA3ECD8F /* ObjectiveCSupport.swift */; };
+		8D83EBD71E8329EA00D336B7 /* RecordRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D83EBD61E8329EA00D336B7 /* RecordRelation.swift */; };
 		8D9879211E7DF366007204DD /* Pluralize.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D98791E1E7DF366007204DD /* Pluralize.h */; };
 		8D9879221E7DF366007204DD /* Pluralize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98791F1E7DF366007204DD /* Pluralize.swift */; };
 		8D98792B1E7DF686007204DD /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879241E7DF686007204DD /* Database.swift */; };
@@ -448,6 +449,7 @@
 		8AEFFD94B628552361E5B8CED88D388F /* Schema.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Schema.swift; path = RealmSwift/Schema.swift; sourceTree = "<group>"; };
 		8CC9450AA836330025B490B3EF6A480C /* Pods-Mist_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Mist_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		8D3AF166098A43850F6EF59BD81E3744 /* RLMSyncUtil_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncUtil_Private.h; path = include/RLMSyncUtil_Private.h; sourceTree = "<group>"; };
+		8D83EBD61E8329EA00D336B7 /* RecordRelation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordRelation.swift; sourceTree = "<group>"; };
 		8D98791B1E7DF366007204DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8D98791D1E7DF366007204DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D98791E1E7DF366007204DD /* Pluralize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pluralize.h; sourceTree = "<group>"; };
@@ -723,6 +725,7 @@
 				8D9879271E7DF686007204DD /* NonPublicDatabase.swift */,
 				8D9879281E7DF686007204DD /* PublicDatabase.swift */,
 				8D9879291E7DF686007204DD /* Record.swift */,
+				8D83EBD61E8329EA00D336B7 /* RecordRelation.swift */,
 				8D98792A1E7DF686007204DD /* RecordZone.swift */,
 				C30964718F8B6C807DD95E6B444CBFB1 /* Messenger.swift */,
 				8D9879191E7DF365007204DD /* Third Party */,
@@ -1312,6 +1315,7 @@
 				8D9879221E7DF366007204DD /* Pluralize.swift in Sources */,
 				8D98792E1E7DF686007204DD /* NonPublicDatabase.swift in Sources */,
 				8D9879301E7DF686007204DD /* Record.swift in Sources */,
+				8D83EBD71E8329EA00D336B7 /* RecordRelation.swift in Sources */,
 				3CC883FEDFD74DD840E570831220599F /* Messenger.swift in Sources */,
 				8D98792D1E7DF686007204DD /* Mist.swift in Sources */,
 				8D98792C1E7DF686007204DD /* DataCache.swift in Sources */,
