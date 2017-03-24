@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NonPublicDatabase : Database {
+public class NonPublicDatabase : Database {
     
     
     // MARK: - Initializer
@@ -36,6 +36,11 @@ class NonPublicDatabase : Database {
         let fileName = "\(scopeName)+\(NonPublicDatabase.currentlyAuthenticatedUserID)"
         
         super.init(databaseScope: databaseScope, fileName: fileName)
+        
+        // We have to put this down here (after call to super.init) since it uses self
+        guard (type(of: self) != Database.self) && (type(of: self) != NonPublicDatabase.self) else {
+            fatalError("NonPublicDatabase is an abstract class and cannot be directly instantiated. Please use PrivateDatabase or SharedDatabase.")
+        }
         
     }
     
@@ -78,4 +83,33 @@ class NonPublicDatabase : Database {
         }
         
     }
+    
+    
+    // TODO: Properly implement this
+    /*
+    func updateCurrentUserCache(forUserID userID:RecordID) {
+        
+        // Prep for merging temp data if appropriate
+        let usingTempCache = (self.currentlyAuthenticatedUserID == "temporaryUserCache")
+        let tempPrivateDatabase: NonPublicDatabase? = usingTempCache ? self.privateDatabase : nil
+        let tempSharedDatabase: NonPublicDatabase? = usingTempCache ? self.sharedDatabase : nil
+        
+        // Point our non-public databases to the Realms for the new User
+        self.updateUserDatabases(withUserID: userID)
+        
+        // Merge temp data into these databases if appropriate
+        if let tempPrivateDatabase = tempPrivateDatabase, let tempSharedDatabase = tempSharedDatabase {
+            
+            self.privateDatabase = self.privateDatabase.merge(otherDatabase: tempPrivateDatabase)
+            self.sharedDatabase = self.sharedDatabase.merge(otherDatabase: tempSharedDatabase)
+            
+        }
+        
+        // Update our stored User ID
+        self.currentlyAuthenticatedUserID = userID
+        
+    }
+ */
+
+    
 }
