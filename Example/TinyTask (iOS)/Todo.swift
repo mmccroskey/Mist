@@ -19,6 +19,11 @@ class Todo : Record {
     dynamic var isCompleted: Bool = false
     
     
+    // MARK: - Relationships
+    
+    dynamic var todoList: TodoList?
+    
+    
     // MARK: - Mist Helper Functions
     
     override func propertyKeys() -> Set<String> {
