@@ -21,33 +21,6 @@ open class Record : Object {
     // MARK: - PUBLIC -
     
     
-    // MARK: Initializers
-    
-    public convenience init(databaseScope: DatabaseScope) {
-        
-        self.init()
-        
-        self.databaseScope = databaseScope
-        
-        guard databaseScope != .shared else {
-            fatalError("Root Records (aka Records without parents) cannot be saved to the shared Database.")
-        }
-        
-        self.parent = nil
-        
-    }
-    
-    public convenience init(parent: Record) {
-        
-        self.init()
-        
-        self.databaseScope = parent.databaseScope
-        
-        self.parent = parent
-        
-    }
-    
-    
     // MARK: - Properties
     
     open fileprivate(set) dynamic var id: RecordID = UUID().uuidString
@@ -71,11 +44,19 @@ open class Record : Object {
     
     // MARK: - Relationships
     
+    /*
     public dynamic var parent: Record? = nil {
         
         willSet {
             
-            
+            if let newParent = newValue {
+                
+                let recordRelation = RecordRelation()
+                recordRelation.parent = newParent
+                recordRelation.typeName = String(describing: type(of: self))
+                recordRelation.
+                
+            }
             
         }
         
@@ -85,9 +66,10 @@ open class Record : Object {
     internal let childrenRecordRelations = LinkingObjects(fromType: RecordRelation.self, property: "parent")
     public var children: Set<DynamicObject> {
         
-        let database = Mist.dataCache.databaseForScope(databaseScope)
+        //let database = Mist.dataCache.databaseForScope(databaseScope)
         var childrenToReturn: Set<DynamicObject> = []
         
+        /*
         for childRecordRelation in childrenRecordRelations {
             
             let typeName = childRecordRelation.typeName
@@ -100,10 +82,12 @@ open class Record : Object {
             childrenToReturn.insert(childRecord)
             
         }
+ */
         
         return childrenToReturn
         
     }
+ */
     
     
     // MARK: - INTERNAL
@@ -181,7 +165,7 @@ open class Record : Object {
     
     // MARK: - Properties
     
-    internal var databaseScope: DatabaseScope!
+    internal var database: Database? = nil
     
     
     // MARK: - Relationships
@@ -191,6 +175,7 @@ open class Record : Object {
     
     // MARK: - Functions
     
+    /*
     internal func rootRecord() -> Record {
         
         guard let parent = parent else {
@@ -201,7 +186,7 @@ open class Record : Object {
         
     }
     
-    internal func configureRecordZone(inRealm realm:Realm) {
+    internal func configureRecordZone(inDatabase database:Database) {
         
         if let parent = self.parent {
             
@@ -218,13 +203,11 @@ open class Record : Object {
             
         } else {
             
-            let database = Mist.dataCache.databaseForScope(databaseScope)
-            
-            if databaseScope == .public {
+            if database.databaseScope == .public {
                 
                 let defaultRecordZoneIdentifier = RecordZone.defaultCombinedIdentifier(forDatabase: database)
                 
-                guard let defaultRecordZone = realm.object(ofType: RecordZone.self, forPrimaryKey: defaultRecordZoneIdentifier) else {
+                guard let defaultRecordZone = database.realm.object(ofType: RecordZone.self, forPrimaryKey: defaultRecordZoneIdentifier) else {
                     fatalError("The public database should always have a default Record Zone.")
                 }
                 
@@ -234,7 +217,7 @@ open class Record : Object {
             } else {
                 
                 let containingRecordZone = RecordZone(zoneName: UUID().uuidString, database: database)
-                realm.add(containingRecordZone)
+                database.realm.add(containingRecordZone)
                 
                 recordZone = containingRecordZone
                 
@@ -243,6 +226,7 @@ open class Record : Object {
         }
         
     }
+ */
     
     /**
      Produce the CKRecord-equivalent of the Record
