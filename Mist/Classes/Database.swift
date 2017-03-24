@@ -13,27 +13,15 @@ import CloudKit
 public typealias DatabaseScope = CKDatabaseScope
 public typealias Token = NotificationToken
 
-internal enum ObjectChangeType {
-    case addition
-    case removal
-}
-
-internal struct ObjectChange {
-    
-    let changeType: ObjectChangeType
-    let object: Object
-    
-}
-
-internal class Database {
+public class Database {
     
     
     // MARK: - Initializers
     
-    init(databaseScope: DatabaseScope, fileName: String) {
+    internal init(databaseScope: DatabaseScope, fileName: String) {
         
         guard type(of: self) != Database.self else {
-            fatalError("Database is an abstract class and cannot be directly instantiated.")
+            fatalError("Database is an abstract class and cannot be directly instantiated. Please use PublicDatabase, PrivateDatabase, or SharedDatabase.")
         }
         
         self.databaseScope = databaseScope
@@ -41,23 +29,14 @@ internal class Database {
         self.dispatchQueue = DispatchQueue(label: "com.Mist.database.\(databaseScope)")
         
         let fileNameWithFileType = "\(fileName).realm"
-        
         var config = Realm.Configuration()
         config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent(fileNameWithFileType)
         self.realmConfiguration = config
         
-        DispatchQueue.main.sync {
-            
-            do {
-                
-                realm = try Realm(configuration: config)
-                
-            } catch let error {
-                
-                fatalError("\(error)")
-                
-            }
-            
+        do {
+            realm = try Realm(configuration: config)
+        } catch let error {
+            fatalError("\(error)")
         }
         
     }
@@ -82,35 +61,13 @@ internal class Database {
         
     }
     
-    /*
-    var recordZones: Results<RecordZone> {
-        
-        let recordZones: Results<RecordZone>
-        
-        DispatchQueue.main.sync {
-            recordZones = realm.objects(RecordZone.self)
-        }
-        
-        return recordZones
-        
-    }
-    */
-    
     // MARK: - Notifications
     
-    func addNotificationBlock(_ block: @escaping (() -> Void)) -> Token {
+    public func addNotificationBlock(_ block: @escaping (() -> Void)) -> Token {
         
-        var token: Token? = nil
-        
-        DispatchQueue.main.sync {
-            
-            token = realm.addNotificationBlock({ (notification, realm) in
-                block()
-            })
-            
-        }
-        
-        return token!
+        return realm.addNotificationBlock({ (notification, realm) in
+            block()
+        })
         
     }
     
@@ -118,51 +75,40 @@ internal class Database {
     // MARK: - Working with Record Zones
     
     
-    func addRecordZone(_ recordZone:RecordZone) {
+    internal func addRecordZone(_ recordZone:RecordZone) {
         
-        dispatchQueue.sync {
+        if !(idsOfRecordZonesWithUnpushedDeletions.contains(recordZone.backingRecordZoneID)) {
             
-            if !(idsOfRecordZonesToDeleteLocally.contains(recordZone.backingRecordZoneID)) {
-                recordZonesToModifyLocally.insert(recordZone)
-            }
+            realm.add(recordZone)
+            recordZonesWithUnpushedChanges.insert(recordZone)
             
         }
         
     }
     
-    func removeRecordZone(_ recordZone:RecordZone) {
+    internal func removeRecordZone(_ recordZone:RecordZone) {
         
-        dispatchQueue.sync {
+        // TODO: This won't work because none of the Records will have the class Record
+        let predicate = NSPredicate(format: "recordZone == %@", recordZone)
+        let containedRecords = realm.objects(Record.self).filter(predicate)
+        let containedRecordsIds = containedRecords.map({ $0.id })
+        
+        var recordsToRemove: [Record] = []
+        for record in recordsWithUnpushedChanges {
             
-            do {
-                
-                let tempRealm = try Realm(configuration: realmConfiguration)
-
-                let predicate = NSPredicate(format: "recordZone == %@", recordZone)
-                let containedRecords = tempRealm.objects(Record.self).filter(predicate)
-                let containedRecordsIds = containedRecords.map({ $0.id })
-                
-                var recordsToRemove: [Record] = []
-                for record in recordsToModifyLocally {
-                    
-                    if containedRecordsIds.contains(record.id) {
-                        recordsToRemove.append(record)
-                    }
-                    
-                }
-                recordsToModifyLocally = recordsToModifyLocally.subtracting(Set(recordsToRemove))
-                
-                idsOfRecordsToDeleteLocally = idsOfRecordsToDeleteLocally.subtracting(Set(containedRecordsIds))
-                
-            } catch let error {
-                fatalError("\(error)")
+            if containedRecordsIds.contains(record.id) {
+                recordsToRemove.append(record)
             }
             
-            
-            recordZonesToModifyLocally.remove(recordZone)
-            idsOfRecordZonesToDeleteLocally.insert(recordZone.backingRecordZoneID)
-            
         }
+        
+        recordsWithUnpushedChanges = recordsWithUnpushedChanges.subtracting(recordsToRemove)
+        idsOfRecordsWithUnpushedDeletions = idsOfRecordsWithUnpushedDeletions.subtracting(Set(containedRecordsIds))
+        
+        recordZonesWithUnpushedChanges.remove(recordZone)
+        idsOfRecordZonesWithUnpushedDeletions.insert(recordZone.backingRecordZoneID)
+        
+        realm.delete(recordZone)
         
     }
     
@@ -172,23 +118,15 @@ internal class Database {
     
     // MARK: Fetching
     
-    func dynamicFetch(recordOfTypeWithName typeName:String, withId id:RecordID) -> DynamicObject? {
-        
-        var dynamicObject: DynamicObject? = nil
-        
-        DispatchQueue.main.sync {
-            dynamicObject = realm.dynamicObject(ofType: typeName, forPrimaryKey: id)
-        }
-        
-        return dynamicObject
-        
+    internal func dynamicFetch(recordOfTypeWithName typeName:String, withId id:RecordID) -> DynamicObject? {
+        return realm.dynamicObject(ofType: typeName, forPrimaryKey: id)
     }
     
-    func fetch<T: Record>(recordOfType type:T.Type, withId id:RecordID) -> T? {
+    public func fetch<T: Record>(recordOfType type:T.Type, withId id:RecordID) -> T? {
         return fetch(recordsOfType: type, matchingIds: Set([id])).first
     }
     
-    func fetch<T: Record>(recordsOfType type:T.Type, matchingIds ids:Set<RecordID>) -> Results<T> {
+    public func fetch<T: Record>(recordsOfType type:T.Type, matchingIds ids:Set<RecordID>) -> Results<T> {
         
         let predicate = NSPredicate(format: "id IN %@", ids)
         let records = fetchAll(recordsOfType: type).filter(predicate)
@@ -197,22 +135,15 @@ internal class Database {
         
     }
     
-    func fetchAll<T: Record>(recordsOfType type:T.Type) -> Results<T> {
-        
-        var results: Results<T>? = nil
-        
-        DispatchQueue.main.sync {
-            results = realm.objects(type)
-        }
-        
-        return results!
-        
+    public func fetchAll<T: Record>(recordsOfType type:T.Type) -> Results<T> {
+        return realm.objects(type)
     }
     
     
     // MARK: Finding
     
-    func find<T: Record>(recordsOfType type:T.Type, filteredBy filter: @escaping ((T) -> Bool)) -> Results<T> {
+    /*
+    public func find<T: Record>(recordsOfType type:T.Type, filteredBy filter: @escaping ((T) -> Bool)) -> Results<T> {
         
         let predicate = NSPredicate { (object, parameters) -> Bool in
             
@@ -227,33 +158,23 @@ internal class Database {
         return realm.objects(type).filter(predicate)
         
     }
+ */
     
-    func find<T: Record>(recordsOfType type:T.Type, where predicate:NSPredicate) -> Results<T> {
-        
-        var results: Results<T>? = nil
-        
-        DispatchQueue.main.sync {
-            results = realm.objects(type).filter(predicate)
-        }
-        
-        return results!
-        
+    public func find<T: Record>(recordsOfType type:T.Type, where predicate:NSPredicate) -> Results<T> {
+        return realm.objects(type).filter(predicate)
     }
     
     
     // MARK: Adding
     
-    func addRecord(_ record:Record) {
+    public func add(_ record:Record) {
         
-        print("Inside addRecord but outside the dispatchQueue's sync call...")
-        
-        dispatchQueue.sync {
+        if !(idsOfRecordsWithUnpushedDeletions.contains(record.id)) {
             
-            print("Inside addRecord's dispatchQueue's sync call...")
             
-            if !(idsOfRecordsToDeleteLocally.contains(record.id)) {
-                recordsToModifyLocally.insert(record)
-            }
+            
+            realm.add(record)
+            recordsWithUnpushedChanges.insert(record)
             
         }
         
@@ -262,13 +183,32 @@ internal class Database {
     
     // MARK: Removing
     
-    func removeRecord(_ record:Record) {
+    public func delete(_ record:Record) {
         
-        dispatchQueue.sync {
+        recordsWithUnpushedChanges.remove(record)
+        idsOfRecordsWithUnpushedDeletions.insert(record.id)
+        
+        realm.delete(record)
+        
+    }
+    
+    
+    // MARK: Saving
+    
+    public func write(_ block:(() -> Void)) {
+        
+        do {
             
-            recordsToModifyLocally.remove(record)
-            idsOfRecordsToDeleteLocally.insert(record.id)
+            try realm.write {
+                
+                block()
+                
+                // TODO: Sync to CloudKit
+                
+            }
             
+        } catch let error {
+            fatalError("\(error)")
         }
         
     }
@@ -276,6 +216,7 @@ internal class Database {
     
     // MARK: Processing Changes
     
+    /*
     func processRecordChanges() {
         
         dispatchQueue.sync {
@@ -435,26 +376,21 @@ internal class Database {
         }
         
     }
+ */
     
     
     // MARK: - Private Properties
     
-    private var realm: Realm!
+    internal var realm: Realm!
     
-    private let databaseScope: DatabaseScope
+    internal let databaseScope: DatabaseScope
     
     private let dispatchQueue: DispatchQueue!
     
-    private var idsOfRecordZonesToDeleteLocally: Set<CKRecordZoneID> = []
-    private var recordZonesToModifyLocally: Set<RecordZone> = []
-    
-    private var idsOfRecordsToDeleteLocally: Set<RecordID> = []
-    private var recordsToModifyLocally: Set<Record> = []
-    
-    private var idsOfRecordZonesWithUnpushedChanges: Set<CKRecordZoneID> = []
+    private var recordZonesWithUnpushedChanges: Set<RecordZone> = []
     private var idsOfRecordZonesWithUnpushedDeletions: Set<CKRecordZoneID> = []
     
-    private var idsOfRecordsWithUnpushedChanges: Set<RecordID> = []
+    private var recordsWithUnpushedChanges: Set<Record> = []
     private var idsOfRecordsWithUnpushedDeletions: Set<RecordID> = []
     
     private let realmConfiguration: Realm.Configuration
