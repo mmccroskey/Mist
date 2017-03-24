@@ -7,3 +7,9 @@
 //
 
 import Foundation
+
+public class SharedDatabase : NonPublicDatabase {
+    
+    init() { super.init(databaseScope: .shared) }
+    
+}

@@ -8,8 +8,8 @@
 
 import Foundation
 
-class PublicDatabase : Database {
+public class PublicDatabase : Database {
     
-    init() { super.init(databaseScope: .public, fileName: "public") }
+    public init() { super.init(databaseScope: .public, fileName: "public") }
     
 }

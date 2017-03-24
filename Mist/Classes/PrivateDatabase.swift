@@ -8,7 +8,8 @@
 
 import Foundation
 
-class PrivateDatabase : NonPublicDatabase {
+public class PrivateDatabase : NonPublicDatabase {
 
+    init() { super.init(databaseScope: .private) }
     
 }
