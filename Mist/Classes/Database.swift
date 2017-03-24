@@ -118,10 +118,6 @@ public class Database {
     
     // MARK: Fetching
     
-    internal func dynamicFetch(recordOfTypeWithName typeName:String, withId id:RecordID) -> DynamicObject? {
-        return realm.dynamicObject(ofType: typeName, forPrimaryKey: id)
-    }
-    
     public func fetch<T: Record>(recordOfType type:T.Type, withId id:RecordID) -> T? {
         return fetch(recordsOfType: type, matchingIds: Set([id])).first
     }
@@ -142,24 +138,6 @@ public class Database {
     
     // MARK: Finding
     
-    /*
-    public func find<T: Record>(recordsOfType type:T.Type, filteredBy filter: @escaping ((T) -> Bool)) -> Results<T> {
-        
-        let predicate = NSPredicate { (object, parameters) -> Bool in
-            
-            guard let record = object as? T else {
-                fatalError()
-            }
-            
-            return filter(record)
-            
-        }
-        
-        return realm.objects(type).filter(predicate)
-        
-    }
- */
-    
     public func find<T: Record>(recordsOfType type:T.Type, where predicate:NSPredicate) -> Results<T> {
         return realm.objects(type).filter(predicate)
     }
@@ -171,8 +149,6 @@ public class Database {
         
         if !(idsOfRecordsWithUnpushedDeletions.contains(record.id)) {
             
-            
-            
             realm.add(record)
             recordsWithUnpushedChanges.insert(record)
             
@@ -181,7 +157,7 @@ public class Database {
     }
     
     
-    // MARK: Removing
+    // MARK: Deleting
     
     public func delete(_ record:Record) {
         

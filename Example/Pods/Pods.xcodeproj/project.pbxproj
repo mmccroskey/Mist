@@ -50,7 +50,6 @@
 		3932C21FC52BCD934303AD92071B1757 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 205359F2CA42B21F52B59954DB7CB31D /* Foundation.framework */; };
 		3A4B60214B1C13D2E812A257CD3246C3 /* RLMSyncUtil_Private.h in Copy . Private Headers */ = {isa = PBXBuildFile; fileRef = 8D3AF166098A43850F6EF59BD81E3744 /* RLMSyncUtil_Private.h */; };
 		3B225F6CF8F573E001C8DFF95BEC6F29 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC1598FADC027796F3558E35D8F19E1 /* Aliases.swift */; };
-		3CC883FEDFD74DD840E570831220599F /* Messenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30964718F8B6C807DD95E6B444CBFB1 /* Messenger.swift */; };
 		3DE8A669C962234C353A737E3A6362D5 /* RLMObjectStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = D80057579D0A79C70773A3D4BD9F69A7 /* RLMObjectStore.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
 		401E8FA14A8DCB97CACC0A69173FC088 /* RLMSyncPermissionChange_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = BE117423DB8BA5C9C49A9ADD8344F8C5 /* RLMSyncPermissionChange_Private.h */; };
 		40E9717AD991D59E7C58EF60627C809B /* RLMSyncPermissionChange.m in Sources */ = {isa = PBXBuildFile; fileRef = B34CA3C969542666EAD51EF558194837 /* RLMSyncPermissionChange.m */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
@@ -115,11 +114,9 @@
 		8A646E48143C4F5995A735062BC4C7C6 /* RLMListBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = C45B080ABB4FE9807F8154F0F20367AD /* RLMListBase.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
 		8B3653216EA87BD02AF1841A19933FC8 /* RLMPlatform.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = CB58403FDC92D1505DD43BB01787B70A /* RLMPlatform.h */; };
 		8BF63012196807C141DF1D8037EEEB88 /* ObjectiveCSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E1D40BABA7C3FC39A666D3FA3ECD8F /* ObjectiveCSupport.swift */; };
-		8D83EBD71E8329EA00D336B7 /* RecordRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D83EBD61E8329EA00D336B7 /* RecordRelation.swift */; };
 		8D9879211E7DF366007204DD /* Pluralize.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D98791E1E7DF366007204DD /* Pluralize.h */; };
 		8D9879221E7DF366007204DD /* Pluralize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98791F1E7DF366007204DD /* Pluralize.swift */; };
 		8D98792B1E7DF686007204DD /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879241E7DF686007204DD /* Database.swift */; };
-		8D98792C1E7DF686007204DD /* DataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879251E7DF686007204DD /* DataCache.swift */; };
 		8D98792D1E7DF686007204DD /* Mist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879261E7DF686007204DD /* Mist.swift */; };
 		8D98792E1E7DF686007204DD /* NonPublicDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879271E7DF686007204DD /* NonPublicDatabase.swift */; };
 		8D98792F1E7DF686007204DD /* PublicDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9879281E7DF686007204DD /* PublicDatabase.swift */; };
@@ -451,13 +448,11 @@
 		8AEFFD94B628552361E5B8CED88D388F /* Schema.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Schema.swift; path = RealmSwift/Schema.swift; sourceTree = "<group>"; };
 		8CC9450AA836330025B490B3EF6A480C /* Pods-Mist_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Mist_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		8D3AF166098A43850F6EF59BD81E3744 /* RLMSyncUtil_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncUtil_Private.h; path = include/RLMSyncUtil_Private.h; sourceTree = "<group>"; };
-		8D83EBD61E8329EA00D336B7 /* RecordRelation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordRelation.swift; sourceTree = "<group>"; };
 		8D98791B1E7DF366007204DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8D98791D1E7DF366007204DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D98791E1E7DF366007204DD /* Pluralize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pluralize.h; sourceTree = "<group>"; };
 		8D98791F1E7DF366007204DD /* Pluralize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pluralize.swift; sourceTree = "<group>"; };
 		8D9879241E7DF686007204DD /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		8D9879251E7DF686007204DD /* DataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCache.swift; sourceTree = "<group>"; };
 		8D9879261E7DF686007204DD /* Mist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mist.swift; sourceTree = "<group>"; };
 		8D9879271E7DF686007204DD /* NonPublicDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonPublicDatabase.swift; sourceTree = "<group>"; };
 		8D9879281E7DF686007204DD /* PublicDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicDatabase.swift; sourceTree = "<group>"; };
@@ -501,7 +496,6 @@
 		BEA58AEA8CFE6DE16133178E46592018 /* Pods-Mist_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Mist_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C23A12AFA30424E02D440DBECF18F8F8 /* RLMArrayLinkView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RLMArrayLinkView.mm; path = Realm/RLMArrayLinkView.mm; sourceTree = "<group>"; };
 		C301F5F85BAB4B70B72CDEAF47245ACA /* Realm-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Realm-prefix.pch"; sourceTree = "<group>"; };
-		C30964718F8B6C807DD95E6B444CBFB1 /* Messenger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Messenger.swift; sourceTree = "<group>"; };
 		C45B080ABB4FE9807F8154F0F20367AD /* RLMListBase.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RLMListBase.mm; path = Realm/RLMListBase.mm; sourceTree = "<group>"; };
 		C5447A126952813B7ED8E97ADC697C5E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6063FA5B1E5C6077A3670DD77642AED /* Pods-Mist_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Mist_Tests-frameworks.sh"; sourceTree = "<group>"; };
@@ -726,14 +720,11 @@
 				8DD70E5F1E84A4F00001E1ED /* PrivateDatabase.swift */,
 				8DD70E601E84A4F00001E1ED /* SharedDatabase.swift */,
 				8D9879241E7DF686007204DD /* Database.swift */,
-				8D9879251E7DF686007204DD /* DataCache.swift */,
 				8D9879261E7DF686007204DD /* Mist.swift */,
 				8D9879271E7DF686007204DD /* NonPublicDatabase.swift */,
 				8D9879281E7DF686007204DD /* PublicDatabase.swift */,
 				8D9879291E7DF686007204DD /* Record.swift */,
-				8D83EBD61E8329EA00D336B7 /* RecordRelation.swift */,
 				8D98792A1E7DF686007204DD /* RecordZone.swift */,
-				C30964718F8B6C807DD95E6B444CBFB1 /* Messenger.swift */,
 				8D9879191E7DF365007204DD /* Third Party */,
 			);
 			path = Classes;
@@ -1322,10 +1313,7 @@
 				8D9879221E7DF366007204DD /* Pluralize.swift in Sources */,
 				8D98792E1E7DF686007204DD /* NonPublicDatabase.swift in Sources */,
 				8D9879301E7DF686007204DD /* Record.swift in Sources */,
-				8D83EBD71E8329EA00D336B7 /* RecordRelation.swift in Sources */,
-				3CC883FEDFD74DD840E570831220599F /* Messenger.swift in Sources */,
 				8D98792D1E7DF686007204DD /* Mist.swift in Sources */,
-				8D98792C1E7DF686007204DD /* DataCache.swift in Sources */,
 				8D98792B1E7DF686007204DD /* Database.swift in Sources */,
 				EBDF02F9E16705387603FF3F0685BB88 /* Mist-dummy.m in Sources */,
 				8D98792F1E7DF686007204DD /* PublicDatabase.swift in Sources */,

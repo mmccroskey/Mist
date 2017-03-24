@@ -10,9 +10,8 @@ import Foundation
 import RealmSwift
 import CloudKit
 
+
 public typealias RecordID = String
-public typealias RecordValue = CKRecordValue
-public typealias RelationshipDeleteBehavior = CKReferenceAction
 
 
 open class Record : Object {
@@ -40,54 +39,6 @@ open class Record : Object {
     final func allKeys() -> Set<String> {
         return propertyKeys().union(relationshipKeys()).union(assetKeys())
     }
-    
-    
-    // MARK: - Relationships
-    
-    /*
-    public dynamic var parent: Record? = nil {
-        
-        willSet {
-            
-            if let newParent = newValue {
-                
-                let recordRelation = RecordRelation()
-                recordRelation.parent = newParent
-                recordRelation.typeName = String(describing: type(of: self))
-                recordRelation.
-                
-            }
-            
-        }
-        
-    }
-    
-    
-    internal let childrenRecordRelations = LinkingObjects(fromType: RecordRelation.self, property: "parent")
-    public var children: Set<DynamicObject> {
-        
-        //let database = Mist.dataCache.databaseForScope(databaseScope)
-        var childrenToReturn: Set<DynamicObject> = []
-        
-        /*
-        for childRecordRelation in childrenRecordRelations {
-            
-            let typeName = childRecordRelation.typeName
-            let id = childRecordRelation.id
-            
-            guard let childRecord = database.dynamicFetch(recordOfTypeWithName: typeName, withId: id) else {
-                continue
-            }
-            
-            childrenToReturn.insert(childRecord)
-            
-        }
- */
-        
-        return childrenToReturn
-        
-    }
- */
     
     
     // MARK: - INTERNAL
@@ -174,59 +125,6 @@ open class Record : Object {
     
     
     // MARK: - Functions
-    
-    /*
-    internal func rootRecord() -> Record {
-        
-        guard let parent = parent else {
-            return self
-        }
-        
-        return parent.rootRecord()
-        
-    }
-    
-    internal func configureRecordZone(inDatabase database:Database) {
-        
-        if let parent = self.parent {
-            
-            guard let parentRecordZone = parent.recordZone else {
-                
-                fatalError(
-                    "You've called configureRecordZone on a Record whose parent has no record zone, which is not allowed. " +
-                    "To avoid this, call configureRecordZone on a root record (one with no parent) first, then on its children."
-                )
-                
-            }
-            
-            recordZone = parentRecordZone
-            
-        } else {
-            
-            if database.databaseScope == .public {
-                
-                let defaultRecordZoneIdentifier = RecordZone.defaultCombinedIdentifier(forDatabase: database)
-                
-                guard let defaultRecordZone = database.realm.object(ofType: RecordZone.self, forPrimaryKey: defaultRecordZoneIdentifier) else {
-                    fatalError("The public database should always have a default Record Zone.")
-                }
-                
-                recordZone = defaultRecordZone
-                
-                
-            } else {
-                
-                let containingRecordZone = RecordZone(zoneName: UUID().uuidString, database: database)
-                database.realm.add(containingRecordZone)
-                
-                recordZone = containingRecordZone
-                
-            }
-            
-        }
-        
-    }
- */
     
     /**
      Produce the CKRecord-equivalent of the Record
