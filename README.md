@@ -79,9 +79,9 @@ All Mist operations are performed on instances of concrete subclasses of its abs
 
 Because Mist is backed by Realm, your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
-
-
 Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Let's start in the middle by creating a Record subclass for Todos.
+
+##### Todo
 
 Every Todo has a `title` (a `String`), a `description` (a `String`), and an `isCompleted` flag (a `Bool`) indicating whether the User has checked off the task. Each Todo also a parent `todoList` (a `TodoList`) where it's listed and potentially many `attachments` (instances of `Attachment`) where the User has attached files to the Todo:
 
