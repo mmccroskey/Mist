@@ -30,7 +30,7 @@ internal class Database {
     
     // MARK: - Initializers
     
-    init(databaseScope: DatabaseScope, userID: RecordID?=nil) {
+    init(databaseScope: DatabaseScope, fileName: String) {
         
         guard type(of: self) != Database.self else {
             fatalError("Database is an abstract class and cannot be directly instantiated.")
@@ -40,39 +40,10 @@ internal class Database {
         
         self.dispatchQueue = DispatchQueue(label: "com.Mist.database.\(databaseScope)")
         
-        let fileName: String
-        
-        if databaseScope == .private || databaseScope == .shared {
-            
-            guard let userID = userID else {
-                fatalError("Non-Public Databases must be created with a userID.")
-            }
-            
-            let databaseScopeName: String
-            
-            switch databaseScope {
-                
-            case .private:
-                databaseScopeName = "private"
-                
-            case .shared:
-                databaseScopeName = "shared"
-                
-            default:
-                fatalError("This code should only execute with a datascope of private or shared, but a different scope was provided: \(databaseScope)")
-                
-            }
-            
-            fileName = "\(userID)_\(databaseScopeName).realm"
-            
-        } else {
-            
-            fileName = "public.realm"
-            
-        }
+        let fileNameWithFileType = "\(fileName).realm"
         
         var config = Realm.Configuration()
-        config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent(fileName)
+        config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent(fileNameWithFileType)
         self.realmConfiguration = config
         
         DispatchQueue.main.sync {

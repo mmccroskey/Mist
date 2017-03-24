@@ -119,8 +119,8 @@ internal class DataCache {
     
     private func updateUserDatabases(withUserID userID:RecordID) {
         
-        self.privateDatabase = NonPublicDatabase(databaseScope: .private, userID: userID)
-        self.sharedDatabase = NonPublicDatabase(databaseScope: .shared, userID: userID)
+        //self.privateDatabase = NonPublicDatabase(databaseScope: .private, userID: userID)
+        //self.sharedDatabase = NonPublicDatabase(databaseScope: .shared, userID: userID)
         
     }
     

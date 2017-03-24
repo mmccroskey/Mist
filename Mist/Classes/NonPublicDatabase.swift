@@ -13,13 +13,29 @@ class NonPublicDatabase : Database {
     
     // MARK: - Initializer
     
-    init(databaseScope: DatabaseScope, userID: RecordID) {
+    init(databaseScope: DatabaseScope) {
         
         guard databaseScope != .public else {
             fatalError("Public Database instances must be created as instances of the class PublicDatabase.")
         }
         
-        super.init(databaseScope: databaseScope, userID: userID)
+        let scopeName: String
+        switch databaseScope {
+            
+        case .public:
+            fatalError("Public Database instances must be created as instances of the class PublicDatabase.")
+            
+        case .private:
+            scopeName = "private"
+            
+        case .shared:
+            scopeName = "shared"
+            
+        }
+        
+        let fileName = "\(scopeName)+\(NonPublicDatabase.currentlyAuthenticatedUserID)"
+        
+        super.init(databaseScope: databaseScope, fileName: fileName)
         
     }
     
@@ -31,4 +47,35 @@ class NonPublicDatabase : Database {
         return self
     }
     
+    
+    // MARK: - Adjusting When the Current User Changes
+    
+    static private var currentlyAuthenticatedUserID: RecordID {
+        
+        get {
+            
+            if let userID = UserDefaults.standard.value(forKey: "Mist.currentlyAuthenticatedUserID") as? RecordID {
+                
+                return userID
+                
+            } else {
+                
+                let userID = "temporaryUserCache"
+                UserDefaults.standard.set(userID, forKey: "Mist.currentlyAuthenticatedUserID")
+                UserDefaults.standard.synchronize()
+                
+                return userID
+                
+            }
+            
+        }
+        
+        set {
+            
+            UserDefaults.standard.set(newValue, forKey: "Mist.currentlyAuthenticatedUserID")
+            UserDefaults.standard.synchronize()
+            
+        }
+        
+    }
 }

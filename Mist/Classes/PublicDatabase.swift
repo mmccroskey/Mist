@@ -10,6 +10,6 @@ import Foundation
 
 class PublicDatabase : Database {
     
-    init() { super.init(databaseScope: .public) }
+    init() { super.init(databaseScope: .public, fileName: "public") }
     
 }
