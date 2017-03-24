@@ -38,7 +38,7 @@ internal class Database {
         
         self.databaseScope = databaseScope
         
-        self.dispatchQueue = DispatchQueue(label: "com.Mist.database.record.\(databaseScope)")
+        self.dispatchQueue = DispatchQueue(label: "com.Mist.database.\(databaseScope)")
         
         let fileName: String
         
@@ -75,16 +75,19 @@ internal class Database {
         config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent(fileName)
         self.realmConfiguration = config
         
-        do {
+        DispatchQueue.main.sync {
             
-            realm = try Realm(configuration: config)
-            
-        } catch let error {
-            
-            fatalError("\(error)")
+            do {
+                
+                realm = try Realm(configuration: config)
+                
+            } catch let error {
+                
+                fatalError("\(error)")
+                
+            }
             
         }
-
         
     }
     
@@ -108,18 +111,35 @@ internal class Database {
         
     }
     
+    /*
     var recordZones: Results<RecordZone> {
-        return realm.objects(RecordZone.self)
+        
+        let recordZones: Results<RecordZone>
+        
+        DispatchQueue.main.sync {
+            recordZones = realm.objects(RecordZone.self)
+        }
+        
+        return recordZones
+        
     }
-    
+    */
     
     // MARK: - Notifications
     
     func addNotificationBlock(_ block: @escaping (() -> Void)) -> Token {
         
-        return realm.addNotificationBlock({ (notification, realm) in
-            block()
-        })
+        var token: Token? = nil
+        
+        DispatchQueue.main.sync {
+            
+            token = realm.addNotificationBlock({ (notification, realm) in
+                block()
+            })
+            
+        }
+        
+        return token!
         
     }
     
@@ -181,21 +201,41 @@ internal class Database {
     
     // MARK: Fetching
     
+    func dynamicFetch(recordOfTypeWithName typeName:String, withId id:RecordID) -> DynamicObject? {
+        
+        var dynamicObject: DynamicObject? = nil
+        
+        DispatchQueue.main.sync {
+            dynamicObject = realm.dynamicObject(ofType: typeName, forPrimaryKey: id)
+        }
+        
+        return dynamicObject
+        
+    }
+    
     func fetch<T: Record>(recordOfType type:T.Type, withId id:RecordID) -> T? {
-        return self.fetchAll(recordsOfType: type).filter({ $0.id == id }).first
+        return fetch(recordsOfType: type, matchingIds: Set([id])).first
     }
     
     func fetch<T: Record>(recordsOfType type:T.Type, matchingIds ids:Set<RecordID>) -> Results<T> {
         
         let predicate = NSPredicate(format: "id IN %@", ids)
-        let records = realm.objects(type).filter(predicate)
+        let records = fetchAll(recordsOfType: type).filter(predicate)
         
         return records
         
     }
     
     func fetchAll<T: Record>(recordsOfType type:T.Type) -> Results<T> {
-        return realm.objects(type)
+        
+        var results: Results<T>? = nil
+        
+        DispatchQueue.main.sync {
+            results = realm.objects(type)
+        }
+        
+        return results!
+        
     }
     
     
@@ -218,7 +258,15 @@ internal class Database {
     }
     
     func find<T: Record>(recordsOfType type:T.Type, where predicate:NSPredicate) -> Results<T> {
-        return realm.objects(type).filter(predicate)
+        
+        var results: Results<T>? = nil
+        
+        DispatchQueue.main.sync {
+            results = realm.objects(type).filter(predicate)
+        }
+        
+        return results!
+        
     }
     
     
@@ -226,7 +274,11 @@ internal class Database {
     
     func addRecord(_ record:Record) {
         
+        print("Inside addRecord but outside the dispatchQueue's sync call...")
+        
         dispatchQueue.sync {
+            
+            print("Inside addRecord's dispatchQueue's sync call...")
             
             if !(idsOfRecordsToDeleteLocally.contains(record.id)) {
                 recordsToModifyLocally.insert(record)
@@ -307,7 +359,10 @@ internal class Database {
                     
                     func performCascadingAction(onRecord record:Record, action:((Record) -> Void)) {
                         
-                        for child in record.children {
+                        let predicate = NSPredicate(format: "parent.id == %@", record.id)
+                        let children = writingRealm.objects(Record.self).filter(predicate)
+                        
+                        for child in children {
                             performCascadingAction(onRecord: child, action: action)
                         }
                         
@@ -363,10 +418,19 @@ internal class Database {
                         
                         let recordID = recordToModify.id
                         
-                        let recordToSave: Record
-                        if let extantRecord = writingRealm.object(ofType: Record.self, forPrimaryKey: recordID) {
+                        let classNameOfRecordToModify = String(describing: type(of: recordToModify))
+                        let recordToSave = writingRealm.dynamicCreate(classNameOfRecordToModify, value: recordToModify, update: true)
+                        
+                        /*
+                        if let extantRecord = writingRealm.dynamicObject(ofType: classNameOfRecordToModify, forPrimaryKey: recordID) {
+                            
                             recordToSave = extantRecord
+                            
                         } else {
+                            
+                            
+                            
+                            recordToSave = writingRealm.dynamicCreate(classNameOfRecordToModify, value: recordToModify, update: true)
                             
                             if let parent = recordToModify.parent {
                                 recordToSave = Record(parent: parent)
@@ -377,12 +441,13 @@ internal class Database {
                         }
                         
                         for key in recordToModify.allKeys() {
-
-                            if let value = recordToModify.value(forKey: key) {
-                                recordToSave.setValue(value, forKey: key)
+                            
+                            if let value = recordToModify.value(forKeyPath: key) {
+                                recordToSave.setValue(value, forKeyPath: key)
                             }
                             
                         }
+                         */
                         
                         writingRealm.add(recordToSave)
                         self.idsOfRecordsWithUnpushedChanges.insert(recordID)
@@ -403,7 +468,7 @@ internal class Database {
     
     // MARK: - Private Properties
     
-    private let realm: Realm
+    private var realm: Realm!
     
     private let databaseScope: DatabaseScope
     

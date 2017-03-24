@@ -71,8 +71,39 @@ open class Record : Object {
     
     // MARK: - Relationships
     
-    public dynamic var parent: Record? = nil
-    public let children = LinkingObjects(fromType: Record.self, property: "parent")
+    public dynamic var parent: Record? = nil {
+        
+        willSet {
+            
+            
+            
+        }
+        
+    }
+    
+    
+    internal let childrenRecordRelations = LinkingObjects(fromType: RecordRelation.self, property: "parent")
+    public var children: Set<DynamicObject> {
+        
+        let database = Mist.dataCache.databaseForScope(databaseScope)
+        var childrenToReturn: Set<DynamicObject> = []
+        
+        for childRecordRelation in childrenRecordRelations {
+            
+            let typeName = childRecordRelation.typeName
+            let id = childRecordRelation.id
+            
+            guard let childRecord = database.dynamicFetch(recordOfTypeWithName: typeName, withId: id) else {
+                continue
+            }
+            
+            childrenToReturn.insert(childRecord)
+            
+        }
+        
+        return childrenToReturn
+        
+    }
     
     
     // MARK: - INTERNAL

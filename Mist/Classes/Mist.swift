@@ -110,7 +110,11 @@ public class Mist {
     
     private static func modify(_ records:Set<Record>, withChangeType changeType:ObjectChangeType) {
         
+        print("Inside Mist.modify...")
+        
         for record in records {
+            
+            print("Inside the for-loop for Mist.modify...")
             
             let database = Mist.dataCache.databaseForScope(record.databaseScope)
             

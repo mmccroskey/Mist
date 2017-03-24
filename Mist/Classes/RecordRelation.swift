@@ -7,3 +7,13 @@
 //
 
 import Foundation
+import RealmSwift
+
+class RecordRelation : Object {
+    
+    dynamic var parent: Record? = nil
+    
+    dynamic var typeName: String = ""
+    dynamic var id: String = ""
+    
+}

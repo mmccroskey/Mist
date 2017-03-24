@@ -18,17 +18,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         
+        /*
         let groceryList = TodoList(databaseScope: .private)
         groceryList.title = "Grocery List"
         print("Here's the grocery list: \(groceryList)")
+        
+        let milk = Todo(parent: groceryList)
+        milk.parent = groceryList
+        
         
         Mist.write {
             
             Mist.add(groceryList)
             
         }
+        */
         
-        /*
         token = Mist.addNotificationBlock(forScope: .private) {
             
             guard let fetchedGroceryList = Mist.fetchAll(recordsOfType: TodoList.self, from: .private).first else {
@@ -55,25 +60,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         
+        print("About to start creating Records...")
+        
         let groceryList = TodoList(databaseScope: .private)
         groceryList.title = "Grocery List"
+        
+        print("Here's the groceryList we just created: \(groceryList)")
         
         let eggs = Todo(parent: groceryList)
         eggs.title = "Eggs"
         
+        print("Here's the eggs Todo we just created: \(eggs)")
+        
         let milk = Todo(parent: groceryList)
-        eggs.title = "Milk"
+        milk.title = "Milk"
+        
+        print("Here's the milk Todo we just created: \(milk)")
         
         let bread = Todo(parent: groceryList)
-        eggs.title = "Bread"
+        bread.title = "Bread"
+        
+        print("Here's the bread Todo we just created: \(bread)")
+        
+        print("About to write...")
         
         Mist.write {
+            
+            print("Inside the Mist write block...")
             
             let records: Set<Record> = [groceryList, eggs, milk, bread]
             Mist.add(records)
             
         }
-        */
         
     }
 
