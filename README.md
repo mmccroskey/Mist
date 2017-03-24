@@ -81,67 +81,37 @@ Because Mist is backed by Realm, your model classes need to follow all of [Realm
 
 
 
-Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. We'll start by defining a Record subclass for the Todo List.
+Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Let's start in the middle by creating a Record subclass for Todos.
+
+Every Todo has a `title` (a `String`), a `description` (a `String`), and an `isCompleted` flag (a `Bool`) indicating whether the User has checked off the task. Each Todo also a parent `todoList` (a `TodoList`) where it's listed and potentially many `attachments` (instances of `Attachment`) where the User has attached files to the Todo:
 
 ```swift
+
 import Mist
 
-class TodoList : Record {
+class Todo : Record {
     
     
     // MARK: - Properties
+    // Per Realm's rules, all properties have to be dynamic vars.
     
-    var title: String? {
-    
-        get { return self.propertyValue(forKey: "title") as? String }
-        set { self.setPropertyValue(newValue as? RecordValue, forKey:"title") }
-    	
-    }
-    
-    // If you know a property will always have a value, then you can
-    // set its initial value, make it non-optional, and force the casting
-    // of the object returned by the get and provided in the set.
-    var completed: Bool = false {
-    
-        get { return self.propertyValue(forKey: "completed") as! Bool }
-        set { self.setPropertyValue(newValue as RecordValue, forKey: "completed") }
-    
-    }
-    
+    dynamic var title: String = ""
+    dynamic var description: String = ""
+    dynamic var isCompleted: Bool = false
     
     // MARK: - Relationships
-    // Relationships are just like properties, except that you use relatedRecord
-    // and setRelatedRecord rather than using propertyValue and setPropertyValue.
-    // These relationship-specific functions ensure that CKReferences are created
-    // and destroyed as needed behind the scenes. The types of all relationships
-    // must be subclasses of Record.
-	
-    var attachment: Attachment? {
     
-        get { return self.relatedRecord(forKey: "attachment") as? Attachment }
-        set { self.setRelatedRecord(newValue, forKey: "attachment") }
+    // Per Realm's rules, to-one relationships must be optional dynamic vars.
+    dynamic var todoList: TodoList?
     
-    }
-    
-    var assignee: User? {
-    
-        get { return self.relatedRecord(forKey: "assignee") as? User }
-        set { self.setRelatedRecord(newValue, forKey: "assignee") }
-    
-    }
-    
-    // Record has a parent property that's a real-relationship equivalent
-    // of CKRecord's parent CKReference property. You can use Record's parent
-    // directly in your code, or can wrap it in a custom property name 
-    // for convenience as we've done here.
-    var todoList: TodoList? {
-    
-        get { return self.parent as? TodoList }
-        set { self.parent = newValue }
-    
-    }
+    // For to-many inverses to to-one relationships, Realm has
+    // a LinkingObjects class which automatically stays updated
+    // to reflect all the objects that have this object as a parent.
+    let attachments = LinkingObjects(fromType: Attachment.self, property: "todo")
     
 }
+
+```
 
 
 class TodoList : Record {
