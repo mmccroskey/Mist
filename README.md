@@ -79,29 +79,7 @@ All Mist operations are performed on instances of concrete subclasses of its abs
 
 Because Mist is backed by Realm, your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
-Because every CloudKit Container has a `Users` Record Type, Mist defines a subclass for it out of the box:
 
-```swift
-
-public class User : Record {}
-
-```
-
-Since CloudKit's `Users` Record Type has no properties by default, neither does this subclass. If you wish to add properties, you can do so through a class extension:
-
-```swift
-
-public extension User {
-    
-    
-    // MARK: - Properties
-    
-    dynamic var firstName: String = ""
-    dynamic var lastName: String = ""
-    
-}
-
-```
 
 Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. We'll start by defining a Record subclass for the Todo List.
 
@@ -225,6 +203,30 @@ class Attachment : Record {
         set { self.setAsset(forKey: "attachedFile") }
 	
     }
+    
+}
+
+```
+
+Because every CloudKit Container has a `Users` Record Type, Mist defines a subclass for it out of the box:
+
+```swift
+
+public class User : Record {}
+
+```
+
+Since CloudKit's `Users` Record Type has no properties by default, neither does this subclass. If you wish to add properties, you can do so through a class extension:
+
+```swift
+
+public extension User {
+    
+    
+    // MARK: - Properties
+    
+    dynamic var firstName: String = ""
+    dynamic var lastName: String = ""
     
 }
 
