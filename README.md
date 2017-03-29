@@ -137,36 +137,23 @@ class TodoList : Record {
 
 ```
 
+##### Attachment
+
 ```swift
 
 class Attachment : Record {
     
     
-    // MARK: - Initializers
-    
-    init() { super.init(className: "Attachments") }
-    
-    
     // MARK: - Properties
     
-    var title: String? {
-    
-        get { return self.propertyValue(forKey: "title") as? String }
-        set { self.setPropertyValue(newValue as? RecordValue, forKey:"title") }
-    	
-    }
+    dynamic var title: String = ""
     
     
-    // MARK: - Assets
+    // MARK: - Relationships
+    
     // Mist has an Asset class that's equivalent to CloudKit's CKAsset, except that
     // Mist automatically persists the assets locally so they're always available.
-    
-    var attachedFile: Asset? {
-        
-        get { return self.asset(forKey: "attachedFile") }
-        set { self.setAsset(forKey: "attachedFile") }
-	
-    }
+    var attachedFile: Asset?
     
 }
 
