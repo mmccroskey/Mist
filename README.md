@@ -24,7 +24,7 @@ To start using Mist, jump to [Usage](https://github.com/mmccroskey/Mist/blob/mas
 - Swift 3.0+
 
 ## Communication
-- If you have **found a bug**, [open an issue](https://github.com/mmccroskey/Mist/issues/new).
+- If you **find a bug**, [open an issue](https://github.com/mmccroskey/Mist/issues/new).
 - If you **have a feature request**, [open an issue](https://github.com/mmccroskey/Mist/issues/new).
 - If you **want to contribute**, [submit a pull request](https://github.com/mmccroskey/Mist/pulls/new).
 
