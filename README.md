@@ -78,13 +78,9 @@ Coming soon.
 
 ## Usage
 
-### Creating Record Subclasses
+With Mist, you define your schema using regular Swift classes. Each Record Type you want to store in your app should have its own subclass of the abstract class `Record`.
 
-After [installing Mist](https://github.com/mmccroskey/Mist/blob/master/README.md#installation), you'll need to create your `Record` subclasses.
-
-All Mist operations are performed on instances of concrete subclasses of its abstract class `Record`. To use Mist, start by creating subclasses of `Record` for each Record Type in your app's CloudKit schema.
-
-Because Mist is backed by Realm, your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
+Because Mist is backed by [Realm](https://realm.io/docs/swift/latest/), your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
 #### Example: TinyTask App
 
