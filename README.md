@@ -79,7 +79,7 @@ Because Mist is backed by Realm, your model classes need to follow all of [Realm
 
 #### Example: TinyTask App
 
-Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Let's start in the middle by creating a Record subclass for Todos. Here are the model classes we need to create:
+Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Here are the model classes we need to create:
 
 ##### Todo
 
