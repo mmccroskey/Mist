@@ -16,7 +16,7 @@ Mist was created because **CloudKit is great, but it has some fundamental shortc
 
 Mist seeks to solve these problems by directly supporting **local persistence**, by requiring the use of **typed models with true relationships**, & by providing **automatic synchronization**. It accomplishes all this by building a typed local persistence layer with [Realm](http://github.com/realm/realm-cocoa), and then synchronizing that layer with CloudKit in the background.
 
-To start using Mist, jump to [Usage](https://github.com/mmccroskey/MistLegacy/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/MistLegacy/blob/master/README.md#mists-architecture-explained).
+To start using Mist, jump to [Usage](https://github.com/mmccroskey/Mist/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/Mist/blob/master/README.md#mists-architecture-explained).
 
 ## Requirements
 - iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+
