@@ -221,9 +221,11 @@ errands.todos.append(buyGroceries)
 
 ```
 
-Now we need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in CloudKit.
+Now we need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in Mist and in CloudKit.
 
-### CloudKit Database Types
+### Mist Databases
+
+#### How CloudKit Stores Data
 
 As described in the [CloudKit documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every CloudKit-enabled application typically has one CloudKit Container (`CKContainer`), and every Container has exactly one Public Database (`CKDatabase`), N Private Databases, and N Shared Databases, where N is the number of User Records (`CKRecord`) in the Container. 
 
@@ -233,13 +235,11 @@ Therefore, all Users share the same Public Database, but each User has her own P
 
 Mist reflects this by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
 
-### Databases in Mist
+#### How Mist Stores Data
 
 All Mist operations are performed against its Databases, which are local caches of records backed by Realm. Record are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
 
 So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit.
-
-#### Saving Records
 
 ```swift
 
