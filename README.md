@@ -1,22 +1,31 @@
 # Mist
 
-Mist is an adapter for CloudKit that supports local persistence, typed models with true relationships, automatic synchronization, and a convention-over-configuration approach to enforcing best practices.
+Mist combines the best parts of Realm & CloudKit to bring you the simplest possible way to build modern user-data-driven applications.
 
-*(TOC Goes Here)*
+**Persist Records Locally:**
+- [x] Define your models using real Swift classes
+- [x] Store records on device in four lines of code
+- [x] Query for records quickly and synchronously
+- [x] Keep queried result sets up-to-date automatically (no refetching needed)
+- [x] Read and write records from any thread
 
----
+**Keep Local Records Securely Synced with Cloud:**
+- [x] Keep records synchronized with a secure server with zero extra code (no more parsing JSON!)
+- [x] Optionally store your records so securely that even you the developer can't see them (only the user can)
 
-## Why Mist?
+**Enjoy Automatic User Management:**
+- [x] User is automatically logged in at all times (backed by their iCloud user)
+- [x] Mist handles iCloud logouts and user switching automatically and transparently
+- [x] No account creation, login, logout, password reset, or third party integration code to write
 
-Mist was created because **CloudKit is great, but it has some fundamental shortcomings**:
+**Share Records Effortlessly:**
+- [x] Just set "share" relationship on Record you want to share and then save; Mist does the rest
+- [x] User can share Records with any other Users in their Contacts (no Contacts framework permission required)
+- [x] User can share Records with anyone on Earth that can open a link (just share the link provided)
+- [x] Current app Users receive invite via push and optional in-app UI, can accept or decline
+- [x] New app Users taken to App Store to install, then can accept or decline from app
 
-* Although it lets you sync records between cloud and device, it doesn't let you save them locally once they've arrived;
-* Although it has a flexible approach to data modelling, that flexibility makes it verbose and error-prone to use;
-* Although it has incredible features for synchronization, they're arcane & opt-in rather than obvious & automatic.
-
-Mist seeks to solve these problems by directly supporting **local persistence**, by requiring the use of **typed models with true relationships**, & by providing **automatic synchronization**. It accomplishes all this by building a typed local persistence layer with [Realm](http://github.com/realm/realm-cocoa), and then synchronizing that layer with CloudKit in the background.
-
-To start using Mist, jump to [Usage](https://github.com/mmccroskey/Mist/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/Mist/blob/master/README.md#mists-architecture-explained).
+To start using Mist, jump to [Usage](https://github.com/mmccroskey/Mist/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/Mist/blob/master/README.md#mists-architecture-explained).To start using Mist, jump to [Usage](https://github.com/mmccroskey/Mist/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/Mist/blob/master/README.md#mists-architecture-explained).
 
 ## Requirements
 - iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+
