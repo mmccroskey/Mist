@@ -151,9 +151,11 @@ class Attachment : Record {
     
     // MARK: - Relationships
     
+    dynamic var todo: Todo?
+    
     // Mist has an Asset class that's equivalent to CloudKit's CKAsset, except that
     // Mist automatically persists the assets locally so they're always available.
-    var attachedFile: Asset?
+    dynamic var attachedFile: Asset?
     
 }
 
