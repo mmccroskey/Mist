@@ -161,6 +161,8 @@ class Attachment : Record {
 
 ```
 
+##### User
+
 Because every CloudKit Container has a `Users` Record Type, Mist defines a subclass for it out of the box:
 
 ```swift
