@@ -188,9 +188,9 @@ public extension User {
 
 ```
 
-### Using Record Subclasses
+### Creating Records
 
-Once you've created your `Record` subclasses, you'll want to use them to create Record instances. Let's say you're going to run some errands:
+Once you've created your `Record` subclasses, you'll want to use them to create some Records. Let's say you're going to run some errands:
 
 ```swift
 
@@ -230,6 +230,8 @@ Now we need to save these Records. Before we do that, though, we need to learn a
 As described in the [CloudKit documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every CloudKit-enabled application typically has one CloudKit Container (`CKContainer`), and every Container has exactly one Public Database (`CKDatabase`), N Private Databases, and N Shared Databases, where N is the number of User Records (`CKRecord`) in the Container. 
 
 *(Graphic Goes Here)*
+
+The Public Database is therefore accessible to all Users, and all Records in the Public Database can be seen 
 
 Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud user at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
