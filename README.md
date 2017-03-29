@@ -97,6 +97,7 @@ class Todo : Record {
     dynamic var description: String = ""
     dynamic var isCompleted: Bool = false
     
+    
     // MARK: - Relationships
     
     // Per Realm's rules, to-one relationships must be optional dynamic vars.
