@@ -83,8 +83,6 @@ Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask 
 
 ##### Todo
 
-Every Todo has a `title` (a `String`), a `description` (a `String`), and an `isCompleted` flag (a `Bool`) indicating whether the User has checked off the task. Each Todo also a parent `todoList` (a `TodoList`) where it's listed and potentially many `attachments` (instances of `Attachment`) where the User has attached files to the Todo:
-
 ```swift
 
 import Mist
