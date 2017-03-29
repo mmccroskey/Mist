@@ -103,7 +103,6 @@ class Todo : Record {
     
     // Per Realm's rules, to-one relationships must be optional dynamic vars.
     dynamic var todoList: TodoList?
-    dynamic var assignee: User?
     
     // For to-many inverses to to-one relationships, Realm has
     // a LinkingObjects class which automatically stays updated
@@ -191,51 +190,38 @@ public extension User {
 
 ### Using Record Subclasses
 
-Once you've created your `Record` subclasses, you'll want to use them to create Record instances. Let's say you're going to do some chores around the house, while you send out your husband to run some errands:
+Once you've created your `Record` subclasses, you'll want to use them to create Record instances. Let's say you're going to run some errands:
 
 ```swift
-
-let chores = TodoList()
-chores.title = "Chores"
-
-let takeOutGarbage = Todo()
-takeOutGarbage.title = "Take out garbage"
-takeOutGarbage.todoList = chores
-takeOutGarbage.assignee = Mist.currentUser
-
-let walkTheDog = Todo()
-walkTheDog.title = "Walk the dog"
-walkTheDog.todoList = chores
-walkTheDog.assignee = Mist.currentUser
-
-let hubby = User()
-hubby.firstName = "David"
-hubby.lastName = "Allen"
 
 let errands = TodoList()
 errands.title = "Errands"
 
-let groceryListTextFile = Asset()
-groceryListTextFile.fileURL = ... // URL to local file on device
+let pickUpDryCleaning = Todo()
+pickUpDryCleaning.title = "Pick up dry cleaning"
+pickUpDryCleaning.todoList = errands
+errands.todos.append(pickUpDryCleaning)
+
+let buyStamps = Todo()
+buyStamps.title = "Buy stamps"
+buyStamps.todoList = errands
+errands.todos.append(buyStamps)
 
 let groceryList = Attachment()
 groceryList.title = "Grocery List"
+let groceryListTextFile = Asset()
+groceryListTextFile.fileURL = ... // URL to local file on device
 groceryList.asset = groceryListTextFile
 
 let buyGroceries = Todo()
 buyGroceries.title = "Buy groceries"
-buyGroceries.todoList = errands
-buyGroceries.assignee = hubby
 buyGroceries.attachment = groceryList
-
-let pickUpDryCleaning = Todo()
-pickUpDryCleaning.title = "Pick up dry cleaning"
-pickUpDryCleaning.todoList = errands
-pickUpDryCleaning.assignee = hubby
+buyGroceries.todoList = errands
+errands.todos.append(buyGroceries)
 
 ```
 
-Now we just need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in CloudKit.
+Now we need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in CloudKit.
 
 ### CloudKit Database Types
 
@@ -245,11 +231,11 @@ As described in the [CloudKit documentation](https://developer.apple.com/library
 
 Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud user at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
-Mist reflects by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
+Mist reflects this by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
 
 ### Databases in Mist
 
-All Mist operations are performed against its Databases, local caches of records backed by Realm. Record are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
+All Mist operations are performed against its Databases, which are local caches of records backed by Realm. Record are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
 
 So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit.
 
@@ -257,22 +243,28 @@ So, to save Records, you first need to create an instance of the concrete `Datab
 
 ```swift
 
-// TodoLists created as shown above
-let chores = ...
-let errands = ...
+let errands = ... // Created as shown above
 
 let privateDb = PrivateDatabase()
 
 privateDb.write {
 
-    privateDb.add(chores)
     privateDb.add(errands)
     
 }
 
 ```
 
-First we create a `PrivateDatabase`, and then we `add` our `TodoList`s to the Database inside its `write` transaction. Adding the `TodoList`s automatically adds the other objects we created, since they're related to those `TodoList`s. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of `Realm`. This is because **
+First we create a `PrivateDatabase`, and then we `add` our `TodoList` to the Database inside its `write` transaction. Adding the `TodoList` automatically adds the other objects we created, since they're related (directly or indirectly) to that `TodoList`. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of the `Realm` class. This is because **each Database is backed by its own Realm file on disk, and each Database instance is backed by a Realm instance.** 
+
+This means that all the rules about Realm instances also apply to Database instances. Most importantly, this means that **Databases instances (& all Record instances managed by them) are thread-locked.** Once a Database instance has been created, all subsequent interactions with that Database (and any Record instances you fetched from it or saved to it) must occur on that same thread. This sounds ridiculous at first, but is actually pretty simple to adhere to because of three factors:
+
+1. Every instance of a particular Database subclass (e.g. `PrivateDatabase`) points to the same set of data.
+    - So just create a new instance of the Database whenever you need to read or write some data.
+2. Databases instances (and any objects you fetch from them) automatically stay updated to the latest state of the cache.
+    - So if you're using Records from one instance of a Database, and then another instance updates the DB, your instance will instantly have those latest changes without you having to do another fetch.
+3. You can be notified whenever the data in a Database changes.
+    - So if you're using one instance of a Database to drive a UI and another to write Records in the background, just listen for the change notification and reload your UI when data changes.
 
 You use the `add` function whether you're saving new Records, or saving edits to existing Records.
 
