@@ -92,6 +92,7 @@ class Todo : Record {
     
     // MARK: - Properties
     // Per Realm's rules, all properties have to be dynamic vars.
+    // They can be optionals; we just don't need them to be here.
     
     dynamic var title: String = ""
     dynamic var description: String = ""
