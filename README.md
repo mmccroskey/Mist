@@ -102,6 +102,7 @@ class Todo : Record {
     
     // Per Realm's rules, to-one relationships must be optional dynamic vars.
     dynamic var todoList: TodoList?
+    dynamic var assignee: User?
     
     // For to-many inverses to to-one relationships, Realm has
     // a LinkingObjects class which automatically stays updated
@@ -187,21 +188,11 @@ public extension User {
 
 ```
 
-#### Using Record Subclasses
+### Using Record Subclasses
 
 Once you've created your `Record` subclasses, you'll want to use them to create Record instances. Let's say you're going to do some chores around the house, while you send out your husband to run some errands:
 
 ```swift
-
-// Mist has a convenience property for the current User;
-// it's nil if no User is logged into iCloud on the device.
-// See Authentication section of README for details.
-guard let me = Mist.currentUser else {
-    
-    print("ERROR: We're not authenticated, so we can't assign todos to ourself.")
-    return
-    
-}
 
 let chores = TodoList()
 chores.title = "Chores"
@@ -209,13 +200,12 @@ chores.title = "Chores"
 let takeOutGarbage = Todo()
 takeOutGarbage.title = "Take out garbage"
 takeOutGarbage.todoList = chores
-takeOutGarbage.assignee = me
+takeOutGarbage.assignee = Mist.currentUser
 
 let walkTheDog = Todo()
 walkTheDog.title = "Walk the dog"
 walkTheDog.todoList = chores
-walkTheDog.assignee = me
-
+walkTheDog.assignee = Mist.currentUser
 
 let hubby = User()
 hubby.firstName = "David"
@@ -244,23 +234,25 @@ pickUpDryCleaning.assignee = hubby
 
 ```
 
-Now we just need to save these Records. Before we do that, though, we need to learn a bit about Mist's Operations, since they're the basis of saving Records, and of all other Record actions.
+Now we just need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in CloudKit.
 
-### Mist Operations
+### CloudKit Database Types
 
-All Mist operations are performed against its local cache -- records are fetched from the local cache, and saves/deletes are performed on the local cache. Separately from these operations, Mist synchronizes its local cache with CloudKit.
+As described in the [CloudKit documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every CloudKit-enabled application typically has one CloudKit Container (`CKContainer`), and every Container has exactly one Public Database (`CKDatabase`), N Private Databases, and N Shared Databases, where N is the number of User Records (`CKRecord`) in the Container. 
 
-By default, this synchronization is triggered manually whenever you call `Mist.sync()`. However, if you wish, you can [enable automatic synchronization](). If you do so, then every operation will trigger an equivalent partial sync -- fetching Records will cause Mist to pull the latest Records into the local cache before querying that cache for the Records you requested; adding Records will cause Mist to add them to the local cache as normal, and then to push those changes up to CloudKit immediately. Therefore, when automatic synchronization is enabled, you never need to call `Mist.sync()` yourself, although it's harmless to do so.
+*(Graphic Goes Here)*
 
-Every Mist operation is asynchronous; each operation has a completion closure that provides feedback on whether the operation was successful, and in the case of the `fetch` and `find` operations, the closure also provides the Records requested if any exist.
+Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud user at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
-Putting all of the above together, you'll notice in the code below that every Mist operation's completion closure has at least two objects. The first is a `RecordOperationResult`, which indicates whether the relevant operation against the local cache was successful, and if not, then what went wrong. The second is an optional `SyncSummary`; the summary is `nil` if automatic synchronization is disabled (the default); if automatic synchronization is enabled, then the summary indicates whether syncing succeeded, and if not, then what went wrong.
+Mist reflects by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
 
-**All the examples below assume that automatic synchronization is enabled.**
+### Databases in Mist
+
+All Mist operations are performed against its Databases, local caches of records backed by Realm. Record are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
+
+So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit.
 
 #### Saving Records
-
-You save Records by adding them to the appropriate `StorageScope` using Mist's static `add` function:
 
 ```swift
 
@@ -268,29 +260,18 @@ You save Records by adding them to the appropriate `StorageScope` using Mist's s
 let chores = ...
 let errands = ...
 
-let todoLists: Set<TodoList> = [chores, errands]
+let privateDb = PrivateDatabase()
 
-Mist.add(todoLists, to: .public) { (recordOperationResult, syncSummary) in
+privateDb.write {
 
-    // recordOperationResult indicates whether saving to the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local save failed due to error: \(recordOperationResult.error)")
-    }
-    
-    // syncSummary indicates whether saving to CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
-    
-    print("TodoLists and their dependent objects saved successfully")
+    privateDb.add(chores)
+    privateDb.add(errands)
     
 }
 
 ```
+
+First we create a `PrivateDatabase`, and then we `add` our `TodoList`s to the Database inside its `write` transaction. Adding the `TodoList`s automatically adds the other objects we created, since they're related to those `TodoList`s. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of `Realm`. This is because **
 
 You use the `add` function whether you're saving new Records, or saving edits to existing Records.
 
