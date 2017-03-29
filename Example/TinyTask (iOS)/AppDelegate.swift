@@ -18,19 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         
-        let publicDb = PublicDatabase()
+        let privateDb = PrivateDatabase()
         
-        token = publicDb.addNotificationBlock {
+        token = privateDb.addNotificationBlock {
             
-            print("Save completed on publicDb.")
+            print("Save completed on privateDb.")
             
             let titleIsGroceryList = NSPredicate(format: "title == %@", "Grocery List")
-            if let savedGroceryList = publicDb.find(recordsOfType: TodoList.self, where: titleIsGroceryList).first {
+            if let savedGroceryList = privateDb.find(recordsOfType: TodoList.self, where: titleIsGroceryList).first {
                 
                 print("Here's the grocery list we saved: \(savedGroceryList)")
                 
                 let todoListIsGroceryList = NSPredicate(format: "todoList == %@", savedGroceryList)
-                let savedTodos = publicDb.find(recordsOfType: Todo.self, where: todoListIsGroceryList)
+                let savedTodos = privateDb.find(recordsOfType: Todo.self, where: todoListIsGroceryList)
                 
                 print("Here are the items in the grocery list: \(savedTodos)")
                 
@@ -38,6 +38,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         
+        let titleIsGroceryList = NSPredicate(format: "title == %@", "Grocery List")
+        if let savedGroceryList = privateDb.find(recordsOfType: TodoList.self, where: titleIsGroceryList).first {
+            
+            print("Here's the grocery list we saved: \(savedGroceryList)")
+            
+            let todoListIsGroceryList = NSPredicate(format: "todoList == %@", savedGroceryList)
+            let savedTodos = privateDb.find(recordsOfType: Todo.self, where: todoListIsGroceryList)
+            
+            print("Here are the items in the grocery list: \(savedTodos)")
+            
+        }
+
+        
+        /*
         let groceryList = TodoList()
         groceryList.title = "Grocery List"
         
@@ -53,14 +67,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bread.title = "Bread"
         bread.todoList = groceryList
         
-        publicDb.write {
+        privateDb.write {
             
-            publicDb.add(groceryList)
-            publicDb.add(eggs)
-            publicDb.add(milk)
-            publicDb.add(bread)
+            privateDb.add(groceryList)
+            privateDb.add(eggs)
+            privateDb.add(milk)
+            privateDb.add(bread)
             
         }
+         */
         
     }
 
