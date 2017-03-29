@@ -69,17 +69,17 @@ Coming soon.
 
 ## Usage
 
-### Getting Set Up
+### Creating Record Subclasses
 
 After [installing Mist](https://github.com/mmccroskey/Mist/blob/master/README.md#installation), you'll need to create your `Record` subclasses.
-
-#### Creating Record Subclasses
 
 All Mist operations are performed on instances of concrete subclasses of its abstract class `Record`. To use Mist, start by creating subclasses of `Record` for each Record Type in your app's CloudKit schema.
 
 Because Mist is backed by Realm, your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
-Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Let's start in the middle by creating a Record subclass for Todos.
+#### Example: TinyTask App
+
+Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Let's start in the middle by creating a Record subclass for Todos. Here are the model classes we need to create:
 
 ##### Todo
 
@@ -111,37 +111,32 @@ class Todo : Record {
 
 ```
 
+##### TodoList
+
+```swift
 
 class TodoList : Record {
-    
-    
-    // MARK: - Initializers
-    
-    init() { super.init(className: "TodoLists") }
-    
+
     
     // MARK: - Properties
     
-    var title: String? {
-    
-        get { return self.propertyValue(forKey: "title") as? String }
-        set { self.setPropertyValue(newValue as? RecordValue, forKey:"title") }
-    	
-    }
+    dynamic var title: String = ""
+    dynamic var isArchived: Bool = false
     
     
     // MARK: - Relationships
     
-    // Record has a read-only children property that automatically holds 
-    // all the Records that have this Record as their parent. You can 
-    // use Record's children property directly in your code, or you can
-    // wrap it in a custom property name for convenience as we've done here.
-    var todos: Set<Todo>? {
-        get { return self.children as? Set<Todo> }
-    }
+    // In addition to using LinkingObjects for to-many relationships
+    // as we did in Todo above, you can also use an instance of List,
+    // which has to be updated manually, but which preserves order of insertion.
+    // We'll use that because we want users to be able to reorder their Todos.
+    let todos = List<Todo>()
     
 }
 
+```
+
+```swift
 
 class Attachment : Record {
     
