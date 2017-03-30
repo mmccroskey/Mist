@@ -10,6 +10,6 @@ import Foundation
 
 public class PrivateDatabase : NonPublicDatabase {
 
-    public init() { super.init(databaseScope: .private) }
+    public init() throws { try super.init(databaseScope: .private) }
     
 }

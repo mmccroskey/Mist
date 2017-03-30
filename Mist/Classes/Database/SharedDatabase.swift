@@ -10,6 +10,6 @@ import Foundation
 
 public class SharedDatabase : NonPublicDatabase {
     
-    init() { super.init(databaseScope: .shared) }
+    init() throws { try super.init(databaseScope: .shared) }
     
 }

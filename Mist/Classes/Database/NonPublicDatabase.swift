@@ -13,7 +13,13 @@ public class NonPublicDatabase : Database {
     
     // MARK: - Initializer
     
-    init(databaseScope: DatabaseScope) {
+    init(databaseScope: DatabaseScope) throws {
+        
+        
+        guard let currentUser = Mist.currentUser else {
+            throw MistError.noUserExists
+        }
+
         
         guard databaseScope != .public else {
             fatalError("Public Database instances must be created as instances of the class PublicDatabase.")
@@ -33,9 +39,9 @@ public class NonPublicDatabase : Database {
             
         }
         
-        let fileName = "\(scopeName)+\(NonPublicDatabase.currentlyAuthenticatedUserID)"
+        let fileName = "\(scopeName)+\(currentUser.id)"
         
-        super.init(databaseScope: databaseScope, fileName: fileName)
+        try super.init(databaseScope: databaseScope, fileName: fileName)
         
         // We have to put this down here (after call to super.init) since it uses self
         guard (type(of: self) != Database.self) && (type(of: self) != NonPublicDatabase.self) else {

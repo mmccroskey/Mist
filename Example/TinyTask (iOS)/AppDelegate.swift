@@ -18,11 +18,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         
-        let privateDb = PrivateDatabase()
-        
-        token = privateDb.addNotificationBlock {
+        do {
             
-            print("Save completed on privateDb.")
+            let privateDb = try PrivateDatabase()
+            
+            token = privateDb.addNotificationBlock {
+                
+                print("Save completed on privateDb.")
+                
+                let titleIsGroceryList = NSPredicate(format: "title == %@", "Grocery List")
+                if let savedGroceryList = privateDb.find(recordsOfType: TodoList.self, where: titleIsGroceryList).first {
+                    
+                    print("Here's the grocery list we saved: \(savedGroceryList)")
+                    
+                    let todoListIsGroceryList = NSPredicate(format: "todoList == %@", savedGroceryList)
+                    let savedTodos = privateDb.find(recordsOfType: Todo.self, where: todoListIsGroceryList)
+                    
+                    print("Here are the items in the grocery list: \(savedTodos)")
+                    
+                }
+                
+            }
             
             let titleIsGroceryList = NSPredicate(format: "title == %@", "Grocery List")
             if let savedGroceryList = privateDb.find(recordsOfType: TodoList.self, where: titleIsGroceryList).first {
@@ -36,46 +52,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
             }
             
-        }
-        
-        let titleIsGroceryList = NSPredicate(format: "title == %@", "Grocery List")
-        if let savedGroceryList = privateDb.find(recordsOfType: TodoList.self, where: titleIsGroceryList).first {
             
-            print("Here's the grocery list we saved: \(savedGroceryList)")
-            
-            let todoListIsGroceryList = NSPredicate(format: "todoList == %@", savedGroceryList)
-            let savedTodos = privateDb.find(recordsOfType: Todo.self, where: todoListIsGroceryList)
-            
-            print("Here are the items in the grocery list: \(savedTodos)")
-            
-        }
+            /*
+             let groceryList = TodoList()
+             groceryList.title = "Grocery List"
+             
+             let eggs = Todo()
+             eggs.title = "Eggs"
+             eggs.todoList = groceryList
+             
+             let milk = Todo()
+             milk.title = "Milk"
+             milk.todoList = groceryList
+             
+             let bread = Todo()
+             bread.title = "Bread"
+             bread.todoList = groceryList
+             
+             privateDb.write {
+             
+             privateDb.add(groceryList)
+             privateDb.add(eggs)
+             privateDb.add(milk)
+             privateDb.add(bread)
+             
+             }
+             */
 
-        
-        /*
-        let groceryList = TodoList()
-        groceryList.title = "Grocery List"
-        
-        let eggs = Todo()
-        eggs.title = "Eggs"
-        eggs.todoList = groceryList
-        
-        let milk = Todo()
-        milk.title = "Milk"
-        milk.todoList = groceryList
-        
-        let bread = Todo()
-        bread.title = "Bread"
-        bread.todoList = groceryList
-        
-        privateDb.write {
             
-            privateDb.add(groceryList)
-            privateDb.add(eggs)
-            privateDb.add(milk)
-            privateDb.add(bread)
+        } catch let error {
+            
+            fatalError("\(error)")
             
         }
-         */
         
     }
 

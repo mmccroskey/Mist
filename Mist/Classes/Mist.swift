@@ -9,6 +9,13 @@
 import Foundation
 import RealmSwift
 
+public enum MistError : Error {
+    
+    case noUserExists
+    
+}
+
 public class Mist {
     
+    public static var currentUser: User? = User()
 }

@@ -18,7 +18,7 @@ public class Database {
     
     // MARK: - Initializers
     
-    internal init(databaseScope: DatabaseScope, fileName: String) {
+    internal init(databaseScope: DatabaseScope, fileName: String) throws {
         
         guard type(of: self) != Database.self else {
             fatalError("Database is an abstract class and cannot be directly instantiated. Please use PublicDatabase, PrivateDatabase, or SharedDatabase.")
@@ -33,11 +33,7 @@ public class Database {
         config.fileURL = config.fileURL!.deletingLastPathComponent().appendingPathComponent(fileNameWithFileType)
         self.realmConfiguration = config
         
-        do {
-            realm = try Realm(configuration: config)
-        } catch let error {
-            fatalError("\(error)")
-        }
+        realm = try Realm(configuration: config)
         
     }
     
@@ -171,20 +167,18 @@ public class Database {
     
     // MARK: Saving
     
-    public func write(_ block:(() -> Void)) {
+    public func write(_ block:(() -> Void)) throws {
         
-        do {
+        guard Mist.currentUser != nil else {
+            throw MistError.noUserExists
+        }
+        
+        try realm.write {
             
-            try realm.write {
-                
-                block()
-                
-                // TODO: Sync to CloudKit
-                
-            }
+            block()
             
-        } catch let error {
-            fatalError("\(error)")
+            // TODO: Sync to CloudKit
+            
         }
         
     }
