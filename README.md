@@ -1,22 +1,31 @@
 # Mist
 
-Mist is an adapter for CloudKit that supports local persistence, typed models with true relationships, automatic synchronization, and a convention-over-configuration approach to enforcing best practices.
+Mist combines the best parts of Realm & CloudKit to bring you the simplest possible way to build modern user-data-driven applications.
 
-*(TOC Goes Here)*
+**Persist Records Locally:**
+- [x] Define your models using real Swift classes
+- [x] Store records on device in four lines of code
+- [x] Query for records quickly and synchronously
+- [x] Keep queried result sets up-to-date automatically (no refetching needed)
+- [x] Read and write records from any thread
 
----
+**Keep Local Records Securely Synced with Cloud:**
+- [x] Keep records synchronized with a secure server with zero extra code (no more parsing JSON!)
+- [x] Optionally store your records so securely that even you the developer can't see them (only the user can)
 
-## Why Mist?
+**Enjoy Automatic User Management:**
+- [x] User is automatically logged in at all times (backed by their iCloud user)
+- [x] Mist handles iCloud logouts and user switching automatically and transparently
+- [x] No account creation, login, logout, password reset, or third party integration code to write
 
-Mist was created because **CloudKit is great, but it has some fundamental shortcomings**:
+**Share Records Effortlessly:**
+- [x] Just set "share" relationship on Record you want to share and then save; Mist does the rest
+- [x] User can share Records with any other Users in their Contacts (no Contacts framework permission required)
+- [x] User can share Records with anyone on Earth that can open a link (just share the link provided)
+- [x] Current app Users receive invite via push and optional in-app UI, can accept or decline
+- [x] New app Users taken to App Store to install, then can accept or decline from app
 
-* Although it lets you sync records between cloud and device, it doesn't let you save them locally once they've arrived;
-* Although it has a flexible approach to data modelling, that flexibility makes it verbose and error-prone to use;
-* Although it has incredible features for synchronization, they're arcane & opt-in rather than obvious & automatic.
-
-Mist seeks to solve these problems by directly supporting **local persistence**, by requiring the use of **typed models with true relationships**, & by providing **automatic synchronization**. It accomplishes all this by building a typed local persistence layer with [Realm](http://github.com/realm/realm-cocoa), and then synchronizing that layer with CloudKit in the background.
-
-To start using Mist, jump to [Usage](https://github.com/mmccroskey/MistLegacy/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/MistLegacy/blob/master/README.md#mists-architecture-explained).
+To start using Mist, jump to [Usage](https://github.com/mmccroskey/Mist/blob/master/README.md#usage), or to learn more about how Mist is implemented, see [Mist's Architecture Explained](https://github.com/mmccroskey/Mist/blob/master/README.md#mists-architecture-explained).
 
 ## Requirements
 - iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+
@@ -24,7 +33,7 @@ To start using Mist, jump to [Usage](https://github.com/mmccroskey/MistLegacy/bl
 - Swift 3.0+
 
 ## Communication
-- If you have **found a bug**, [open an issue](https://github.com/mmccroskey/Mist/issues/new).
+- If you **find a bug**, [open an issue](https://github.com/mmccroskey/Mist/issues/new).
 - If you **have a feature request**, [open an issue](https://github.com/mmccroskey/Mist/issues/new).
 - If you **want to contribute**, [submit a pull request](https://github.com/mmccroskey/Mist/pulls/new).
 
@@ -69,21 +78,15 @@ Coming soon.
 
 ## Usage
 
-### Getting Set Up
+With Mist, you define your schema using regular Swift classes. Each Record Type you want to store in your app should have its own subclass of the abstract class `Record`.
 
-After [installing Mist](https://github.com/mmccroskey/Mist/blob/master/README.md#installation), you'll need to create your `Record` subclasses.
+Because Mist is backed by [Realm](https://realm.io/docs/swift/latest/), your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
-#### Creating Record Subclasses
+#### Example: TinyTask App
 
-All Mist operations are performed on instances of concrete subclasses of its abstract class `Record`. To use Mist, start by creating subclasses of `Record` for each Record Type in your app's CloudKit schema.
-
-Because Mist is backed by Realm, your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
-
-Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Let's start in the middle by creating a Record subclass for Todos.
+Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Here are the model classes we need to create:
 
 ##### Todo
-
-Every Todo has a `title` (a `String`), a `description` (a `String`), and an `isCompleted` flag (a `Bool`) indicating whether the User has checked off the task. Each Todo also a parent `todoList` (a `TodoList`) where it's listed and potentially many `attachments` (instances of `Attachment`) where the User has attached files to the Todo:
 
 ```swift
 
@@ -94,10 +97,12 @@ class Todo : Record {
     
     // MARK: - Properties
     // Per Realm's rules, all properties have to be dynamic vars.
+    // They can be optionals; we just don't need them to be here.
     
     dynamic var title: String = ""
     dynamic var description: String = ""
     dynamic var isCompleted: Bool = false
+    
     
     // MARK: - Relationships
     
@@ -113,70 +118,56 @@ class Todo : Record {
 
 ```
 
+##### TodoList
+
+```swift
 
 class TodoList : Record {
-    
-    
-    // MARK: - Initializers
-    
-    init() { super.init(className: "TodoLists") }
-    
+
     
     // MARK: - Properties
     
-    var title: String? {
-    
-        get { return self.propertyValue(forKey: "title") as? String }
-        set { self.setPropertyValue(newValue as? RecordValue, forKey:"title") }
-    	
-    }
+    dynamic var title: String = ""
+    dynamic var isArchived: Bool = false
     
     
     // MARK: - Relationships
     
-    // Record has a read-only children property that automatically holds 
-    // all the Records that have this Record as their parent. You can 
-    // use Record's children property directly in your code, or you can
-    // wrap it in a custom property name for convenience as we've done here.
-    var todos: Set<Todo>? {
-        get { return self.children as? Set<Todo> }
-    }
-    
-}
-
-
-class Attachment : Record {
-    
-    
-    // MARK: - Initializers
-    
-    init() { super.init(className: "Attachments") }
-    
-    
-    // MARK: - Properties
-    
-    var title: String? {
-    
-        get { return self.propertyValue(forKey: "title") as? String }
-        set { self.setPropertyValue(newValue as? RecordValue, forKey:"title") }
-    	
-    }
-    
-    
-    // MARK: - Assets
-    // Mist has an Asset class that's equivalent to CloudKit's CKAsset, except that
-    // Mist automatically persists the assets locally so they're always available.
-    
-    var attachedFile: Asset? {
-        
-        get { return self.asset(forKey: "attachedFile") }
-        set { self.setAsset(forKey: "attachedFile") }
-	
-    }
+    // In addition to using LinkingObjects for to-many relationships
+    // as we did in Todo above, you can also use an instance of List,
+    // which has to be updated manually, but which preserves order of insertion.
+    // We'll use that because we want users to be able to reorder their Todos.
+    let todos = List<Todo>()
     
 }
 
 ```
+
+##### Attachment
+
+```swift
+
+class Attachment : Record {
+    
+    
+    // MARK: - Properties
+    
+    dynamic var title: String = ""
+    
+    
+    // MARK: - Relationships
+    
+    dynamic var todo: Todo?
+    
+    // Mist has an Asset class that's equivalent to CloudKit's CKAsset, except that
+    // Mist automatically persists the assets locally so they're always available.
+    dynamic var attachedFile: Asset?
+    
+}
+
+```
+
+##### User
 
 Because every CloudKit Container has a `Users` Record Type, Mist defines a subclass for it out of the box:
 
@@ -202,110 +193,85 @@ public extension User {
 
 ```
 
-#### Using Record Subclasses
+### Creating Records
 
-Once you've created your `Record` subclasses, you'll want to use them to create Record instances. Let's say you're going to do some chores around the house, while you send out your husband to run some errands:
+Once you've created your `Record` subclasses, you'll want to use them to create some Records. Let's say you're going to run some errands:
 
 ```swift
-
-// Mist has a convenience property for the current User;
-// it's nil if no User is logged into iCloud on the device.
-// See Authentication section of README for details.
-guard let me = Mist.currentUser else {
-    
-    print("ERROR: We're not authenticated, so we can't assign todos to ourself.")
-    return
-    
-}
-
-let chores = TodoList()
-chores.title = "Chores"
-
-let takeOutGarbage = Todo()
-takeOutGarbage.title = "Take out garbage"
-takeOutGarbage.todoList = chores
-takeOutGarbage.assignee = me
-
-let walkTheDog = Todo()
-walkTheDog.title = "Walk the dog"
-walkTheDog.todoList = chores
-walkTheDog.assignee = me
-
-
-let hubby = User()
-hubby.firstName = "David"
-hubby.lastName = "Allen"
 
 let errands = TodoList()
 errands.title = "Errands"
 
-let groceryListTextFile = Asset()
-groceryListTextFile.fileURL = ... // URL to local file on device
+let pickUpDryCleaning = Todo()
+pickUpDryCleaning.title = "Pick up dry cleaning"
+pickUpDryCleaning.todoList = errands
+errands.todos.append(pickUpDryCleaning)
+
+let buyStamps = Todo()
+buyStamps.title = "Buy stamps"
+buyStamps.todoList = errands
+errands.todos.append(buyStamps)
 
 let groceryList = Attachment()
 groceryList.title = "Grocery List"
+let groceryListTextFile = Asset()
+groceryListTextFile.fileURL = ... // URL to local file on device
 groceryList.asset = groceryListTextFile
 
 let buyGroceries = Todo()
 buyGroceries.title = "Buy groceries"
-buyGroceries.todoList = errands
-buyGroceries.assignee = hubby
 buyGroceries.attachment = groceryList
-
-let pickUpDryCleaning = Todo()
-pickUpDryCleaning.title = "Pick up dry cleaning"
-pickUpDryCleaning.todoList = errands
-pickUpDryCleaning.assignee = hubby
+buyGroceries.todoList = errands
+errands.todos.append(buyGroceries)
 
 ```
 
-Now we just need to save these Records. Before we do that, though, we need to learn a bit about Mist's Operations, since they're the basis of saving Records, and of all other Record actions.
+Now we need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in Mist and in CloudKit.
 
-### Mist Operations
+### Mist Databases
 
-All Mist operations are performed against its local cache -- records are fetched from the local cache, and saves/deletes are performed on the local cache. Separately from these operations, Mist synchronizes its local cache with CloudKit.
+#### How CloudKit Stores Data
 
-By default, this synchronization is triggered manually whenever you call `Mist.sync()`. However, if you wish, you can [enable automatic synchronization](). If you do so, then every operation will trigger an equivalent partial sync -- fetching Records will cause Mist to pull the latest Records into the local cache before querying that cache for the Records you requested; adding Records will cause Mist to add them to the local cache as normal, and then to push those changes up to CloudKit immediately. Therefore, when automatic synchronization is enabled, you never need to call `Mist.sync()` yourself, although it's harmless to do so.
+As described in the [CloudKit documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every CloudKit-enabled application typically has one CloudKit Container (`CKContainer`), and every Container has exactly one Public Database (`CKDatabase`), N Private Databases, and N Shared Databases, where N is the number of User Records (`CKRecord`) in the Container. 
 
-Every Mist operation is asynchronous; each operation has a completion closure that provides feedback on whether the operation was successful, and in the case of the `fetch` and `find` operations, the closure also provides the Records requested if any exist.
+*(Graphic Goes Here)*
 
-Putting all of the above together, you'll notice in the code below that every Mist operation's completion closure has at least two objects. The first is a `RecordOperationResult`, which indicates whether the relevant operation against the local cache was successful, and if not, then what went wrong. The second is an optional `SyncSummary`; the summary is `nil` if automatic synchronization is disabled (the default); if automatic synchronization is enabled, then the summary indicates whether syncing succeeded, and if not, then what went wrong.
+The Public Database is therefore accessible to all Users, and all Records in the Public Database can be seen 
 
-**All the examples below assume that automatic synchronization is enabled.**
+Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud user at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
-#### Saving Records
+Mist reflects this by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
 
-You save Records by adding them to the appropriate `StorageScope` using Mist's static `add` function:
+#### How Mist Stores Data
+
+All Mist operations are performed against its Databases, which are local caches of records backed by Realm. Record are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
+
+So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit.
 
 ```swift
 
-// TodoLists created as shown above
-let chores = ...
-let errands = ...
+let errands = ... // Created as shown above
 
-let todoLists: Set<TodoList> = [chores, errands]
+let privateDb = PrivateDatabase()
 
-Mist.add(todoLists, to: .public) { (recordOperationResult, syncSummary) in
+privateDb.write {
 
-    // recordOperationResult indicates whether saving to the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local save failed due to error: \(recordOperationResult.error)")
-    }
-    
-    // syncSummary indicates whether saving to CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
-    
-    print("TodoLists and their dependent objects saved successfully")
+    privateDb.add(errands)
     
 }
 
 ```
+
+First we create a `PrivateDatabase`, and then we `add` our `TodoList` to the Database inside its `write` transaction. Adding the `TodoList` automatically adds the other objects we created, since they're related (directly or indirectly) to that `TodoList`. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of the `Realm` class. This is because **each Database is backed by its own Realm file on disk, and each Database instance is backed by a Realm instance.** 
+
+This means that all the rules about Realm instances also apply to Database instances. Most importantly, this means that **Databases instances (& all Record instances managed by them) are thread-locked.** Once a Database instance has been created, all subsequent interactions with that Database (and any Record instances you fetched from it or saved to it) must occur on that same thread. This sounds ridiculous at first, but is actually pretty simple to adhere to because of three factors:
+
+1. Every instance of a particular Database subclass (e.g. `PrivateDatabase`) points to the same set of data.
+    - So just create a new instance of the Database whenever you need to read or write some data.
+2. Databases instances (and any objects you fetch from them) automatically stay updated to the latest state of the cache.
+    - So if you're using Records from one instance of a Database, and then another instance updates the DB, your instance will instantly have those latest changes without you having to do another fetch.
+3. You can be notified whenever the data in a Database changes.
+    - So if you're using one instance of a Database to drive a UI and another to write Records in the background, just listen for the change notification and reload your UI when data changes.
 
 You use the `add` function whether you're saving new Records, or saving edits to existing Records.
 
