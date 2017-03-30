@@ -125,6 +125,7 @@
 		8D2E27B11E85D7C2001456CE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E27B01E85D7C2001456CE /* User.swift */; };
 		8D9879211E7DF366007204DD /* Pluralize.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D98791E1E7DF366007204DD /* Pluralize.h */; };
 		8D9879221E7DF366007204DD /* Pluralize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98791F1E7DF366007204DD /* Pluralize.swift */; };
+		8DD521EB1E8D4809003948AD /* DatabaseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD521EA1E8D4809003948AD /* DatabaseRecord.swift */; };
 		8F30E204B5C23CD86A7965C8F85174E4 /* RLMOptionalBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4256659B67636C7199E4CB776D722FFF /* RLMOptionalBase.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
 		91E78587C77F8AE61C3EDB0E3E686BEC /* RLMRealmConfiguration.mm in Sources */ = {isa = PBXBuildFile; fileRef = D2A18F7FE87F1BC6540ED86AF64F8160 /* RLMRealmConfiguration.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
 		91FC532232F7348AB763FF6DBBB9CEE5 /* RLMMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = F9E2BD6081421671579E57A46FD9E4FF /* RLMMigration.h */; };
@@ -462,6 +463,7 @@
 		8D98791D1E7DF366007204DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D98791E1E7DF366007204DD /* Pluralize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pluralize.h; sourceTree = "<group>"; };
 		8D98791F1E7DF366007204DD /* Pluralize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pluralize.swift; sourceTree = "<group>"; };
+		8DD521EA1E8D4809003948AD /* DatabaseRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseRecord.swift; sourceTree = "<group>"; };
 		908B15B1C76DB925ADDB83EB5EED07C9 /* RealmSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RealmSwift-prefix.pch"; sourceTree = "<group>"; };
 		922C330F5D37B5971EEFED022FC1C369 /* RLMRealmConfiguration+Sync.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "RLMRealmConfiguration+Sync.h"; path = "include/RLMRealmConfiguration+Sync.h"; sourceTree = "<group>"; };
 		9256A085998650A3FA440FE31694348D /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -853,9 +855,10 @@
 		8D2E27A41E85D46B001456CE /* Object */ = {
 			isa = PBXGroup;
 			children = (
-				8D2E27B01E85D7C2001456CE /* User.swift */,
+				8DD521EA1E8D4809003948AD /* DatabaseRecord.swift */,
 				8D2E27A51E85D46B001456CE /* Record.swift */,
 				8D2E27A61E85D46B001456CE /* RecordZone.swift */,
+				8D2E27B01E85D7C2001456CE /* User.swift */,
 			);
 			path = Object;
 			sourceTree = "<group>";
@@ -1334,6 +1337,7 @@
 				8D2E27A91E85D46B001456CE /* PrivateDatabase.swift in Sources */,
 				EBDF02F9E16705387603FF3F0685BB88 /* Mist-dummy.m in Sources */,
 				8D2E27AA1E85D46B001456CE /* PublicDatabase.swift in Sources */,
+				8DD521EB1E8D4809003948AD /* DatabaseRecord.swift in Sources */,
 				8D2E27AC1E85D46B001456CE /* Record.swift in Sources */,
 				8D2E27AF1E85D479001456CE /* Mist.swift in Sources */,
 				8D2E27AB1E85D46B001456CE /* SharedDatabase.swift in Sources */,
