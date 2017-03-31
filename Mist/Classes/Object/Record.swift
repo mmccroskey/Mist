@@ -14,15 +14,13 @@ import CloudKit
 public typealias RecordID = String
 
 
-open class Record : Object {
+open class Record : MistObject {
     
     
     // MARK: - PUBLIC -
     
     
     // MARK: - Properties
-    
-    open fileprivate(set) dynamic var id: RecordID = UUID().uuidString
     
     open func propertyKeys() -> Set<String> {
         return Set([])
@@ -271,10 +269,6 @@ open class Record : Object {
     
     
     // MARK: - Realm Configuration Functions
-    
-    override open class func primaryKey() -> String? {
-        return "id"
-    }
     
     override open class func ignoredProperties() -> [String] {
         return ["databaseScope"]

@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-internal class ScopedDataStore : Object {
+internal class ScopedDataStore : MistObject {
     
     
     // MARK: - Initializer
@@ -25,8 +25,6 @@ internal class ScopedDataStore : Object {
     
     
     // MARK: - Properties
-    
-    private(set) dynamic var id: String = UUID().uuidString
     
     var databaseScope: DatabaseScope {
         
@@ -66,10 +64,6 @@ internal class ScopedDataStore : Object {
     
     
     // MARK: - Realm Configuration Functions
-    
-    override open class func primaryKey() -> String? {
-        return "id"
-    }
     
     override open class func ignoredProperties() -> [String] {
         return ["databaseScope"]

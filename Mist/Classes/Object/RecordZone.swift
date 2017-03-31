@@ -12,7 +12,7 @@ import CloudKit
 
 internal typealias RecordZoneID = String
 
-internal class RecordZone : Object {
+internal class RecordZone : MistObject {
     
     
     // MARK: - Initializers
@@ -95,10 +95,6 @@ internal class RecordZone : Object {
     
     
     // MARK: - Realm Configuration Functions
-    
-    override static func primaryKey() -> String? {
-        return "combinedIdentifier"
-    }
     
     override static func ignoredProperties() -> [String] {
         return ["backingRecordZoneID","database"]
