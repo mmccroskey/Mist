@@ -54,6 +54,8 @@ internal class RecordZone : Object {
     
     // MARK: - Relationships
     
+    dynamic var scopedDataStore: ScopedDataStore?
+    
     let records = LinkingObjects(fromType: Record.self, property: "recordZone")
     
     
