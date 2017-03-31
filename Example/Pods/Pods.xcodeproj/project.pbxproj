@@ -122,8 +122,9 @@
 		8D2E27AC1E85D46B001456CE /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E27A51E85D46B001456CE /* Record.swift */; };
 		8D2E27AD1E85D46B001456CE /* RecordZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E27A61E85D46B001456CE /* RecordZone.swift */; };
 		8D2E27AF1E85D479001456CE /* Mist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E27AE1E85D479001456CE /* Mist.swift */; };
-		8D2E27B11E85D7C2001456CE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E27B01E85D7C2001456CE /* User.swift */; };
 		8D47AFE81E8DDE1A006731F1 /* ScopedDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D47AFE71E8DDE1A006731F1 /* ScopedDataStore.swift */; };
+		8D47AFEA1E8DE676006731F1 /* MistObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D47AFE91E8DE676006731F1 /* MistObject.swift */; };
+		8D47AFEC1E8DE6A4006731F1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D47AFEB1E8DE6A4006731F1 /* User.swift */; };
 		8D9879211E7DF366007204DD /* Pluralize.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D98791E1E7DF366007204DD /* Pluralize.h */; };
 		8D9879221E7DF366007204DD /* Pluralize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98791F1E7DF366007204DD /* Pluralize.swift */; };
 		8F30E204B5C23CD86A7965C8F85174E4 /* RLMOptionalBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4256659B67636C7199E4CB776D722FFF /* RLMOptionalBase.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"2.4.3\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
@@ -457,9 +458,10 @@
 		8D2E27A51E85D46B001456CE /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		8D2E27A61E85D46B001456CE /* RecordZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordZone.swift; sourceTree = "<group>"; };
 		8D2E27AE1E85D479001456CE /* Mist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mist.swift; sourceTree = "<group>"; };
-		8D2E27B01E85D7C2001456CE /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8D3AF166098A43850F6EF59BD81E3744 /* RLMSyncUtil_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncUtil_Private.h; path = include/RLMSyncUtil_Private.h; sourceTree = "<group>"; };
 		8D47AFE71E8DDE1A006731F1 /* ScopedDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopedDataStore.swift; sourceTree = "<group>"; };
+		8D47AFE91E8DE676006731F1 /* MistObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MistObject.swift; sourceTree = "<group>"; };
+		8D47AFEB1E8DE6A4006731F1 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8D98791B1E7DF366007204DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8D98791D1E7DF366007204DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D98791E1E7DF366007204DD /* Pluralize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pluralize.h; sourceTree = "<group>"; };
@@ -855,10 +857,11 @@
 		8D2E27A41E85D46B001456CE /* Object */ = {
 			isa = PBXGroup;
 			children = (
+				8D47AFE91E8DE676006731F1 /* MistObject.swift */,
 				8D2E27A51E85D46B001456CE /* Record.swift */,
 				8D2E27A61E85D46B001456CE /* RecordZone.swift */,
 				8D47AFE71E8DDE1A006731F1 /* ScopedDataStore.swift */,
-				8D2E27B01E85D7C2001456CE /* User.swift */,
+				8D47AFEB1E8DE6A4006731F1 /* User.swift */,
 			);
 			path = Object;
 			sourceTree = "<group>";
@@ -1330,18 +1333,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D47AFEC1E8DE6A4006731F1 /* User.swift in Sources */,
 				8D2E27A71E85D46B001456CE /* Database.swift in Sources */,
 				8D47AFE81E8DDE1A006731F1 /* ScopedDataStore.swift in Sources */,
 				8D2E27AD1E85D46B001456CE /* RecordZone.swift in Sources */,
 				8D2E27A81E85D46B001456CE /* NonPublicDatabase.swift in Sources */,
 				8D9879221E7DF366007204DD /* Pluralize.swift in Sources */,
 				8D2E27A91E85D46B001456CE /* PrivateDatabase.swift in Sources */,
+				8D47AFEA1E8DE676006731F1 /* MistObject.swift in Sources */,
 				EBDF02F9E16705387603FF3F0685BB88 /* Mist-dummy.m in Sources */,
 				8D2E27AA1E85D46B001456CE /* PublicDatabase.swift in Sources */,
 				8D2E27AC1E85D46B001456CE /* Record.swift in Sources */,
 				8D2E27AF1E85D479001456CE /* Mist.swift in Sources */,
 				8D2E27AB1E85D46B001456CE /* SharedDatabase.swift in Sources */,
-				8D2E27B11E85D7C2001456CE /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
