@@ -7,3 +7,20 @@
 //
 
 import Foundation
+import RealmSwift
+
+open class MistObject : Object {
+    
+    
+    // MARK: - Properties
+    
+    open dynamic var id: String = UUID().uuidString
+    
+    
+    // MARK: - Realm Configuration Functions
+    
+    override open static func primaryKey() -> String? {
+        return "id"
+    }
+    
+}
