@@ -17,38 +17,35 @@ internal class RecordZone : MistObject {
     
     // MARK: - Initializers
     
-    convenience init(zoneName: String, database: Database) {
+    // Used by Database, etc.
+    convenience init(scopedDataStore:ScopedDataStore) {
         
         self.init()
         
-        self.zoneName = zoneName
-        self.database = database
+        self.scopedDataStore = scopedDataStore
+        
+    }
     
+    // Used by CloudKit to create local copies of DBs already in the cloud
+    convenience init(scopedDataStore:ScopedDataStore, zoneName: String) {
+        
+        self.init()
+        
+        self.scopedDataStore = scopedDataStore
+        self.zoneName = zoneName
+        
     }
     
     
     // MARK: - Properties
     
-    private(set) var backingRecordZoneID: CKRecordZoneID {
-        
-        get {
-            return CKRecordZoneID(zoneName: zoneName, ownerName: ownerName)
-        }
-        
-        set {
-            
-            self.zoneName = newValue.zoneName
-            self.ownerName = newValue.ownerName
-            
-        }
+    var backingRecordZone: CKRecordZone {
+        return CKRecordZone(zoneName: zoneName)
     }
     
-    private(set) var database: Database! {
-        
-        didSet {
-            updateCombinedIdentifier()
-        }
-        
+    private(set) var zoneName: String {
+        get { return id }
+        set { id = newValue }
     }
     
     
@@ -59,45 +56,10 @@ internal class RecordZone : MistObject {
     let records = LinkingObjects(fromType: Record.self, property: "recordZone")
     
     
-    // MARK: - Functions
-    
-    static func defaultCombinedIdentifier(forDatabase database:Database) -> String {
-        return "\(database.scopeName)+default+\(CKCurrentUserDefaultName)"
-    }
-    
-    
-    // MARK: - Private Properties
-    
-    dynamic var zoneName: String = "default" {
-        
-        didSet {
-            updateCombinedIdentifier()
-        }
-        
-    }
-    
-    dynamic var ownerName: String = CKCurrentUserDefaultName {
-        
-        didSet {
-            updateCombinedIdentifier()
-        }
-        
-    }
-    
-    dynamic var combinedIdentifier: String = UUID().uuidString
-    
-    
-    // MARK: - Private Functions
-    
-    private func updateCombinedIdentifier() {
-        combinedIdentifier = "\(database.scopeName)+\(zoneName)+\(ownerName)"
-    }
-    
-    
     // MARK: - Realm Configuration Functions
     
     override static func ignoredProperties() -> [String] {
-        return ["backingRecordZoneID","database"]
+        return ["backingRecordZone","zoneName"]
     }
     
 }
