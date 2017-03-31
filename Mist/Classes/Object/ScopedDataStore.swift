@@ -51,11 +51,13 @@ internal class ScopedDataStore : MistObject {
     
     // MARK: - Relationships
     
+    dynamic var defaultRecordZone: RecordZone?
+    
+    let recordZones = LinkingObjects(fromType: RecordZone.self, property: "scopedDataStore")
+    
     func records(pulledFromRealm realm:Realm) -> Results<Record> {
         return realm.objects(Record.self).filter("recordZone IN %@", recordZones)
     }
-    
-    let recordZones = LinkingObjects(fromType: RecordZone.self, property: "scopedDataStore")
     
     
     // MARK: - Shamed Raw Persistence Values
