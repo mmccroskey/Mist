@@ -14,7 +14,7 @@ open class MistObject : Object {
     
     // MARK: - Properties
     
-    open dynamic var id: String = UUID().uuidString
+    open internal(set) dynamic var id: String = UUID().uuidString
     
     
     // MARK: - Realm Configuration Functions
