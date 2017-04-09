@@ -53,7 +53,8 @@ internal class RecordZone : MistObject {
     
     dynamic var scopedDataStore: ScopedDataStore?
     
-    let records = LinkingObjects(fromType: Record.self, property: "recordZone")
+    let recordRelations = LinkingObjects(fromType: RecordRelation.self, property: "recordZone")
+    
     
     
     // MARK: - Realm Configuration Functions
