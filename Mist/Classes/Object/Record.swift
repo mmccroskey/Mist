@@ -44,55 +44,16 @@ open class Record : MistObject {
     
     // MARK: - Initializers
     
-    internal convenience init(realm: Realm, backingRemoteRecord: CKRecord, databaseScope: DatabaseScope, relatedRemoteRecords: Set<CKRecord>?=nil) {
-        
-        self.init()
-        
-        let data = NSMutableData()
-        let coder = NSKeyedArchiver(forWritingWith: data)
-        backingRemoteRecord.encodeSystemFields(with: coder)
-        coder.finishEncoding()
-        self.encodedSystemFields = data as Data
+    internal func updateWithContentsOfRemoteRecord(_ backingRemoteRecord:CKRecord) {
         
         for key in backingRemoteRecord.allKeys() {
             
             if let objectForKey = backingRemoteRecord.object(forKey: key) {
                 
-                if let reference = objectForKey as? CKReference {
+                if let _ = objectForKey as? CKReference {
                     
-                    guard let relatedRemoteRecords = relatedRemoteRecords, let referencedRecord = relatedRemoteRecords.filter({ $0.recordID == reference.recordID }).first else {
-                        fatalError("You must provide all CKRecords referenced by backingRemoteRecord via the relatedRemoteRecords parameter.")
-                    }
-                    
-                    let record: Record
-                    
-                    let filter: ((DynamicObject) -> Bool) = { dynamicObject in
-                        
-                        guard let id = dynamicObject.value(forKey: "id") as? String else {
-                            fatalError("The DynamicObject instance does not have an id property: \(dynamicObject)")
-                        }
-                        
-                        return id == referencedRecord.recordID.recordName
-                        
-                    }
-                    
-                    if let extantDynamicObject = realm.dynamicObjects(referencedRecord.recordType).filter(filter).first {
-                        
-                        let extantObject = extantDynamicObject as Object
-                        
-                        guard let extantRecord = extantObject as? Record else {
-                            fatalError("Could not convert an Object instance to a Record instance: \(extantObject)")
-                        }
-                        
-                        record = extantRecord
-                        
-                    } else {
-                        
-                        record = Record(realm: realm, backingRemoteRecord: referencedRecord, databaseScope: databaseScope, relatedRemoteRecords: relatedRemoteRecords)
-                        
-                    }
-                    
-                    setValue(record, forKey: key)
+                    // TODO: Handle References
+                    fatalError("References not yet supported!")
                     
                 } else if let _ = objectForKey as? CKAsset {
                     
