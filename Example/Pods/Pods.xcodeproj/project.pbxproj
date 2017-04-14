@@ -125,6 +125,7 @@
 		8D47AFE81E8DDE1A006731F1 /* ScopedDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D47AFE71E8DDE1A006731F1 /* ScopedDataStore.swift */; };
 		8D47AFEA1E8DE676006731F1 /* MistObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D47AFE91E8DE676006731F1 /* MistObject.swift */; };
 		8D47AFEC1E8DE6A4006731F1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D47AFEB1E8DE6A4006731F1 /* User.swift */; };
+		8D636F071EA12A4F0068455F /* SerializableConfigurationStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D636F061EA12A4F0068455F /* SerializableConfigurationStorage.swift */; };
 		8D9879211E7DF366007204DD /* Pluralize.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D98791E1E7DF366007204DD /* Pluralize.h */; };
 		8D9879221E7DF366007204DD /* Pluralize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98791F1E7DF366007204DD /* Pluralize.swift */; };
 		8DA266401E9AD61C00424B40 /* RecordRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2663F1E9AD61C00424B40 /* RecordRelation.swift */; };
@@ -463,6 +464,7 @@
 		8D47AFE71E8DDE1A006731F1 /* ScopedDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopedDataStore.swift; sourceTree = "<group>"; };
 		8D47AFE91E8DE676006731F1 /* MistObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MistObject.swift; sourceTree = "<group>"; };
 		8D47AFEB1E8DE6A4006731F1 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		8D636F061EA12A4F0068455F /* SerializableConfigurationStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializableConfigurationStorage.swift; sourceTree = "<group>"; };
 		8D98791B1E7DF366007204DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8D98791D1E7DF366007204DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D98791E1E7DF366007204DD /* Pluralize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pluralize.h; sourceTree = "<group>"; };
@@ -726,6 +728,7 @@
 			isa = PBXGroup;
 			children = (
 				8D2E27AE1E85D479001456CE /* Mist.swift */,
+				8D636F061EA12A4F0068455F /* SerializableConfigurationStorage.swift */,
 				8D2E279E1E85D46B001456CE /* Database */,
 				8D2E27A41E85D46B001456CE /* Object */,
 				8D9879191E7DF365007204DD /* Third Party */,
@@ -1341,6 +1344,7 @@
 				8D47AFE81E8DDE1A006731F1 /* ScopedDataStore.swift in Sources */,
 				8D2E27AD1E85D46B001456CE /* RecordZone.swift in Sources */,
 				8D2E27A81E85D46B001456CE /* NonPublicDatabase.swift in Sources */,
+				8D636F071EA12A4F0068455F /* SerializableConfigurationStorage.swift in Sources */,
 				8D9879221E7DF366007204DD /* Pluralize.swift in Sources */,
 				8D2E27A91E85D46B001456CE /* PrivateDatabase.swift in Sources */,
 				8D47AFEA1E8DE676006731F1 /* MistObject.swift in Sources */,
