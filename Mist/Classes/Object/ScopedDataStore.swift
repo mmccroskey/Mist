@@ -14,12 +14,12 @@ internal class ScopedDataStore : MistObject {
     
     // MARK: - Initializer
     
-    convenience init(databaseScope: DatabaseScope, user: User?=nil) {
+    convenience init(databaseScope: DatabaseScope, userId: String?=nil) {
         
         self.init()
         
         self.databaseScope = databaseScope
-        self.user = user
+        self.userId = userId
         
     }
     
@@ -46,7 +46,7 @@ internal class ScopedDataStore : MistObject {
         
     }
     
-    dynamic var user: User?
+    dynamic var userId: String?
     
     
     // MARK: - Relationships
