@@ -55,10 +55,6 @@ internal class ScopedDataStore : MistObject {
     
     let recordZones = LinkingObjects(fromType: RecordZone.self, property: "scopedDataStore")
     
-    func records(pulledFromRealm realm:Realm) -> Results<Record> {
-        return realm.objects(Record.self).filter("recordZone IN %@", recordZones)
-    }
-    
     
     // MARK: - Shamed Raw Persistence Values
     
