@@ -63,4 +63,11 @@ internal class RecordZone : MistObject {
         return ["backingRecordZone","zoneName"]
     }
     
+    
+    // MARK: - Mist Configuration Functions
+    
+    override func beforeDelete(_ realm: Realm) {
+        realm.mistDelete(recordRelations)
+    }
+    
 }

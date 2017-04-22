@@ -36,4 +36,21 @@ internal class RecordRelation : MistObject {
     
     dynamic var recordZone: RecordZone?
     
+    
+    // MARK: - Mist Configuration Functions
+    
+    override func beforeDelete(_ realm: Realm) {
+        
+        if let relatedObject = realm.dynamicObject(ofType: relatedRecordClassName, forPrimaryKey: relatedRecordId) as Object? {
+            
+            guard let relatedRecord = relatedObject as? Record else {
+                fatalError("Could not convert RecordRelation's respective relation object to a Record")
+            }
+            
+            realm.mistDelete(relatedRecord)
+            
+        }
+        
+    }
+    
 }

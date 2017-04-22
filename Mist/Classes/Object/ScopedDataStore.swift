@@ -67,4 +67,11 @@ internal class ScopedDataStore : MistObject {
         return ["databaseScope"]
     }
     
+    
+    // MARK: - Mist Configuration Functions
+    
+    override func beforeDelete(_ realm: Realm) {
+        realm.mistDelete(recordZones)
+    }
+    
 }

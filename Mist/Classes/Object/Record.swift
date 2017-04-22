@@ -39,6 +39,13 @@ open class Record : MistObject {
     }
     
     
+    // MARK: - Relationships
+    
+    public dynamic var parent: Record?
+    
+    let children = LinkingObjects(fromType: Record.self, property: "parent")
+    
+    
     // MARK: - INTERNAL
     
     
@@ -233,6 +240,13 @@ open class Record : MistObject {
     
     override open class func ignoredProperties() -> [String] {
         return ["databaseScope"]
+    }
+    
+    
+    // MARK: - Mist Configuration Properties
+    
+    override open func beforeDelete(_ realm: Realm) {
+        realm.delete(children)
     }
     
 }
