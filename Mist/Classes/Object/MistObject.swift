@@ -23,4 +23,9 @@ open class MistObject : Object {
         return "id"
     }
     
+    
+    // MARK: - Mist Configuration Functions
+    
+    open func afterAdd(_ realm:Realm) {}
+    open func beforeDelete(_ realm:Realm) {}
 }
