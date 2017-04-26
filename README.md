@@ -78,7 +78,7 @@ Want embedded framework installation support? [Open a pull request](https://gith
 
 ## Usage
 
-### Configure AppDelegate
+### Configuring AppDelegate
 
 To use Mist, start by configuring your AppDelegate appropriately:
 
@@ -121,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ```
 
-### Define App Schema
+### Defining App Schema
 
 Next, you'll want to define you app's schema. With Mist, you define your schema using regular Swift classes. Each Record Type you want to store in your app should have its own subclass of the abstract class `Record`.
 
@@ -389,6 +389,24 @@ Collection-level notifications are identical to what Realm provides, so [check o
 
 Object-level notifications are identical to what Realm provides, so [check out their explanation](https://realm.io/docs/swift/latest/#object-notifications).
 
+### Sync Records with Cloud
+
+One of the best features of Mist is the **synchronization is completely automatic!** Whenever you save Records (aka whenever a `Database`'s `write` transaction completes), Mist automatically does the following:
+
+1. Computes a change set for what you just saved to that Database.
+2. Efficiently pulls the latest content for that Database from CloudKit.
+3. Updates the change set in 1. based on the content delivered in 2. if necessary.
+    * For instance, if you just saved an update to a Record that was actually deleted on CloudKit, then your update to that Record will be removed from the change set and will not be sent to CloudKit.
+4. Saves the latest changes pulled from CloudKit to the local Database.
+5. Pushes the changes represented by the changeset up to CloudKit.
+
+In addition, **CloudKit notifies Mist via silent data push whenever content changes in the cloud**, and Mist responds to that push by pull the latest data for that Database from CloudKit and storing it in the local Database. This means that **the local Database is always up to date with the server** (assuming you have an internet connection).
+
+
+
+
+
+
 ### Configuration
 
 Configuration info goes here.
@@ -396,12 +414,6 @@ Configuration info goes here.
 ### Callbacks
 
 Callbacks info goes here.
-
----
-
-### Advanced Usage
-
-Advanced usage info goes here.
 
 ---
 
