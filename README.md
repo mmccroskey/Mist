@@ -45,7 +45,7 @@ Before installing and using Mist, ensure that your application is configured to 
 
 1. Install CocoaPods 1.0.0 or later.
 2. Run `pod repo update` to make CocoaPods aware of the latest available version of Mist.
-3. In your `Podfile`, add `use_frameworks!` and add `pod 'RealmSwift'` to your main and test targets.
+3. In your `Podfile`, add `use_frameworks!` and add `pod 'Mist'` to your main and test targets.
 4. Paste the following at the bottom of your `Podfile`:
 
 ```ruby
