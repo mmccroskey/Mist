@@ -284,8 +284,12 @@ Much more detail is available in the [Mist's Architecture Explained](#) section 
 
 This means that:
 
-1. **`Database` instances are thread-locked.**
-    * boop
+1. **Database instances (and the Records related to them) are [thread-locked](https://realm.io/docs/swift/latest/#threading).**
+    * Once you create an instance of one of the concrete `Database` subclasses, you can only interact with it on the thread where it was created. This also goes for Records you saved to that Database instance or retrieved from it.
+2. **All instances of a particular Database type (e.g. `PrivateDatabase`) stay synced with the same data.**
+    * This means that whenever you need to access or modify the Records for a Database type, you can just create an instance of that type and do the access/modification right there, and you can be sure that a) you'll be working with up-to-date data, and b) any changes you make will be propogated to the other instances of that Database type.
+3. **You can subscribe to be notified when data changes for a particular Database type.**
+    * Because everything's backed by Realm, you can use [Realm's notification callbacks](https://realm.io/docs/swift/latest/#notifications) to ensure you're updated when a change occurs in another instance of the Database.
 
 #### Saving Records
 
