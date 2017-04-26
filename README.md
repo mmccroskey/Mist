@@ -64,15 +64,15 @@ end
 
 ### Carthage
 
-Coming soon.
+Want Carthage installation support? [Open a pull request](https://github.com/mmccroskey/Mist/pulls/new).
 
 ### Manually
 
-Coming soon.
+Want manual installation support? [Open a pull request](https://github.com/mmccroskey/Mist/pulls/new).
 
 ### Embedded Framework
 
-Coming soon.
+Want embedded framework installation support? [Open a pull request](https://github.com/mmccroskey/Mist/pulls/new).
 
 ---
 
