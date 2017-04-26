@@ -82,11 +82,11 @@ With Mist, you define your schema using regular Swift classes. Each Record Type 
 
 Because Mist is backed by [Realm](https://realm.io/docs/swift/latest/), your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
-#### Example: TinyTask App
+### Example: TinyTask App
 
-Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists, Todos, and Todo Attachments. Todo Lists can have many Todos, and Todos can have many Attachments. Here are the model classes we need to create:
+Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists & Todos. Todo Lists can be private or be shared with other Users. Todos can be assigned to Users, and can have associated Attachments. Here are the model classes we need to create:
 
-##### Todo
+#### Todo
 
 ```swift
 
@@ -108,6 +108,7 @@ class Todo : Record {
     
     // Per Realm's rules, to-one relationships must be optional dynamic vars.
     dynamic var todoList: TodoList?
+    dynamic var assignee: User?
     
     // For to-many inverses to to-one relationships, Realm has
     // a LinkingObjects class which automatically stays updated
@@ -118,7 +119,7 @@ class Todo : Record {
 
 ```
 
-##### TodoList
+#### TodoList
 
 ```swift
 
@@ -143,7 +144,7 @@ class TodoList : Record {
 
 ```
 
-##### Attachment
+#### Attachment
 
 ```swift
 
@@ -167,7 +168,7 @@ class Attachment : Record {
 
 ```
 
-##### User
+#### User
 
 Because every CloudKit Container has a `Users` Record Type, Mist defines a subclass for it out of the box:
 
@@ -193,57 +194,62 @@ public extension User {
 
 ```
 
-### Creating Records
+### Creating & Saving Records
 
-Once you've created your `Record` subclasses, you'll want to use them to create some Records. Let's say you're going to run some errands:
+Once you've created your `Record` subclasses, you'll want to use them to create some Records. Let's say you're going to run some errands by yourself:
 
 ```swift
+
+// Learn more about Mist.currentUser in [section goes here]
+let me = Mist.currentUser
 
 let errands = TodoList()
 errands.title = "Errands"
 
 let pickUpDryCleaning = Todo()
 pickUpDryCleaning.title = "Pick up dry cleaning"
+pickUpDryCleaning.assignee = me
 pickUpDryCleaning.todoList = errands
 errands.todos.append(pickUpDryCleaning)
 
 let buyStamps = Todo()
 buyStamps.title = "Buy stamps"
+buyStamps.assignee = me
 buyStamps.todoList = errands
 errands.todos.append(buyStamps)
+
+let buyGroceries = Todo()
+buyGroceries.title = "Buy groceries"
+buyGroceries.assignee = me
+buyGroceries.todoList = errands
+errands.todos.append(buyGroceries)
 
 let groceryList = Attachment()
 groceryList.title = "Grocery List"
 let groceryListTextFile = Asset()
 groceryListTextFile.fileURL = ... // URL to local file on device
 groceryList.asset = groceryListTextFile
-
-let buyGroceries = Todo()
-buyGroceries.title = "Buy groceries"
 buyGroceries.attachment = groceryList
-buyGroceries.todoList = errands
-errands.todos.append(buyGroceries)
+
+// Learn more about Databases in [section goes here]
+let privateDb = PrivateDatabase()
+privateDb.write {
+    private.add(errands)
+}
 
 ```
 
-Now we need to save these Records. As explained in CloudKit's Architecture Documentation [link goes here], each record stored in CloudKit must be stored in one of its Databases. There are three different types of Databases: public, private, and shared. All Users share a single Public Database, whe
 
-
-
-
-Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in Mist and in CloudKit.
 
 ### Mist Databases
 
 #### How CloudKit Stores Data
 
-As described in the [CloudKit documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every CloudKit-enabled application typically has one CloudKit Container (`CKContainer`), and every Container has exactly one Public Database (`CKDatabase`), N Private Databases, and N Shared Databases, where N is the number of User Records (`CKRecord`) in the Container. 
+As explained in [CloudKit's Architecture Documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), each Record stored in CloudKit must be stored in one of its Databases. There are three different types of Database -- Public, Private, and Shared -- and the Database where you store a Record determines who can see and interact with that Record.
 
-*(Graphic Goes Here)*
+All Users share a single Public Database, and all Users can create, read, update, and delete all Records found there.
 
-The Public Database is where public data is stored. Every User can see every Record in the Container's single Public Database, and every User has full CRUD (Create, Read, Update, & Delete) access to all the Records in the Public Database.
-
-Each User also has their own individual Private Database and Shared Database. In contrast to the Public Database, Private and Shared Databases are only accessible to the User with which they're associated. Only that User can see the Records in that Database, and that User has full CRUD access to those Records.
+Each User also has their own individual Private Database and Shared Database. In contrast to the Public Database, Private and Shared Databases are only accessible to the User with which they're associated. Only that User can see the Records in that Database, and that User has full access to those Records.
 
 Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud User at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
@@ -251,9 +257,51 @@ Mist reflects this by providing three concrete subclasses of its abstract `Datab
 
 #### How Mist Stores Data
 
-All Mist operations -- that is, reading and writing data -- are performed against its Databases, which are local caches of records backed by Realm. Records are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
+With Mist, all reading and writing of records is performed against instances of one of these concrete `Database` subclasses. You create an instance of the `Database` subclass that corresponds to where you to look for (or save) Records in CloudKit, and then you call the appropriate functions to do the reading or writing.
 
-So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit. You then 
+**Every `Database` instance is backed by a `Realm` instance**, so the syntax and rules for `Database` instances are just like the ones for `Realm` instances.
+
+##### Reading Data
+
+```swift
+
+let privateDb = PrivateDatabase()
+
+let allTodos = privateDb.objects(Todo.self)
+let myTodos = allTodos.filter("creator == %@", Mist.currentUser)
+
+```
+
+See Realm's documentation for more.
+
+##### Writing Data
+
+```swift
+
+let packingList = TodoList()
+packingList.title = "Packing List"
+
+let shirts = Todo()
+shirts.title = "Shirts"
+shirts.todoList = packingList
+packingList.todos.append(shirts)
+
+let shoes = Todo()
+shoes.title = "Shoes"
+shoes.todoList = packingList
+packingList.todos.append(shoes)
+
+let hat = Todo()
+hat.title = "Hat"
+hat.todoList = packingList
+packingList.todos.append(hat)
+
+let publicDb = PublicDatabase()
+publicDb.write {
+    publicDb.add(packingList)
+}
+
+```
 
 ```swift
 
