@@ -359,256 +359,35 @@ Note that **all modifications (including deletion) to a Record must occur inside
 
 ### Get Notified when Records Change
 
+Realm (and thus Mist) provides three levels of notification: Database-level, Collection-level, and Object-level.
 
+#### Database-Level Notifications
 
-### Mist Databases
-
-#### How CloudKit Stores Data
-
-As explained in [CloudKit's Architecture Documentation](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), each Record stored in CloudKit must be stored in one of its Databases. There are three different types of Database -- Public, Private, and Shared -- and the Database where you store a Record determines who can see and interact with that Record.
-
-All Users share a single Public Database, and all Users can create, read, update, and delete all Records found there.
-
-Each User also has their own individual Private Database and Shared Database. In contrast to the Public Database, Private and Shared Databases are only accessible to the User with which they're associated. Only that User can see the Records in that Database, and that User has full access to those Records.
-
-Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud User at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
-
-Mist reflects this by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
-
-#### How Mist Stores Data
-
-With Mist, all reading and writing of records is performed against instances of one of these concrete `Database` subclasses. You create an instance of the `Database` subclass that corresponds to where you to look for (or save) Records in CloudKit, and then you call the appropriate functions to do the reading or writing.
-
-**Every `Database` instance is backed by a `Realm` instance**, so the syntax and rules for `Database` instances are just like the ones for `Realm` instances.
-
-##### Reading Data
+Database-level notifications fire any time any changes are committed to any of the instances of that Database type.
 
 ```swift
 
-let privateDb = PrivateDatabase()
+let privateDb = try PrivateDatabase()
+let token = privateDb.addNotificationBlock {
 
-let allTodos = privateDb.objects(Todo.self)
-let myTodos = allTodos.filter("creator == %@", Mist.currentUser)
-
-```
-
-See Realm's documentation for more.
-
-##### Writing Data
-
-```swift
-
-let packingList = TodoList()
-packingList.title = "Packing List"
-
-let shirts = Todo()
-shirts.title = "Shirts"
-shirts.todoList = packingList
-packingList.todos.append(shirts)
-
-let shoes = Todo()
-shoes.title = "Shoes"
-shoes.todoList = packingList
-packingList.todos.append(shoes)
-
-let hat = Todo()
-hat.title = "Hat"
-hat.todoList = packingList
-packingList.todos.append(hat)
-
-let publicDb = PublicDatabase()
-publicDb.write {
-    publicDb.add(packingList)
-}
-
-```
-
-```swift
-
-let errands = ... // Created as shown above
-
-let privateDb = PrivateDatabase()
-
-privateDb.write {
-
-    privateDb.add(errands)
+    print("Something changed in the Private Database!")
     
 }
 
-```
-
-First we create a `PrivateDatabase`, and then we `add` our `TodoList` to the Database inside its `write` transaction. Adding the `TodoList` automatically adds the other objects we created, since they're related (directly or indirectly) to that `TodoList`. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of the `Realm` class. This is because **each Database instance is backed by a Realm instance.** 
-
-This means that all the rules about Realm instances also apply to Database instances. Most importantly, this means that **Databases instances (& all Record instances managed by them) are thread-locked.** Once a Database instance has been created, all subsequent interactions with that Database (and any Record instances you fetched from it or saved to it) must occur on that same thread. This sounds ridiculous at first, but is actually pretty simple to adhere to because of three factors:
-
-1. Every instance of a particular Database subclass (e.g. `PrivateDatabase`) points to the same set of data.
-    - So just create a new instance of the Database whenever you need to read or write some data.
-2. Databases instances (and any objects you fetch from them) automatically stay updated to the latest state of the cache.
-    - So if you're using Records from one instance of a Database, and then another instance updates the DB, your instance will instantly have those latest changes without you having to do another fetch.
-3. You can be notified whenever the data in a Database changes.
-    - So if you're using one instance of a Database to drive a UI and another to write Records in the background, just listen for the change notification and reload your UI when data changes.
-
-#### Fetching Records
-
-You fetch Records using Mist's static `fetch` operation, providing the `RecordID`s of the Records you wish to fetch, and the scope from which you wish to fetch them. Let's say some time has passed and you want to check on your husband's progress to see if he's completed either of his Todos:
-
-```swift
-
-let idsOfHubbysTodos: Set<RecordID> = [buyGroceries.recordID, pickUpDryCleaning.recordID]
-
-Mist.fetch(recordsWithIDs: idsOfHubbysTodos, from: .public) { (syncSummary, recordOperationResult, records) in 
-
-    // syncSummary indicates whether fetching from CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
-
-    // recordOperationResult indicates whether fetching from the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local fetch failed due to error: \(recordOperationResult.error)")
-    }
-    
-    let buyGroceries = records.filter({ $0.title == "Buy Groceries" }).first
-    let pickUpDryCleaning = records.filter({ $0.title == "Pick up dry cleaning" }).first
-    guard let buyGroceries = buyGroceries, let pickUpDryCleaning = pickUpDryCleaning else {
-        
-        print("Some of your husband's Todos no longer exist! I wonder if he deleted them?")
-        return
-        
-    }
-    
-    if buyGroceries.completed == true && pickUpDryCleaning.completed == true {
-        print("Your husband's done with both tasks!")
-    } else if buyGroceries.completed == true || pickUpDryCleaning.completed == true {
-        print("Your husband's still got work to do...")
-    } else {
-        print("Hubby seems to have gotten sidetracked.")
-    }
-
-}
+// Some time later...
+token.stop()
 
 ```
 
-#### Finding Records
+See [Realm's documentation](https://realm.io/docs/swift/latest/#realm-notifications) for more, but note that unlike `Realm`'s `addNotificationBlock` function, `Database`'s `addNotificationBlock` has no parameters because they aren't needed.
 
-Sometimes you don't have RecordIDs, but you still need to access Records that match certain criteria. You find Records using Mist's static `find` function:
+#### Collection-Level Notifications
 
-```swift
+Collection-level notifications are identical to what Realm provides, so [check out their explanation](https://realm.io/docs/swift/latest/#collection-notifications).
 
-Mist.find(recordsOfType: Todo, where: { $0.completed == false }, within: .public) { (syncSummary, recordOperationResult, todosStillToDo) in
-    
-    // syncSummary indicates whether fetching from CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
+#### Object-Level Notifications
 
-    // recordOperationResult indicates whether fetching from the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local save failed due to error: \(recordOperationResult.error)")
-    }
-    
-    print("Here are the Todos you & your husband still have to do: \(todosStillToDo)")
-    
-}
-
-```
-
-Mist also provides a convenience version of the `find` function on `Record`, so you can do the following with Record subclasses:
-
-```swift
-
-Todo.find(where: { $0.completed == false && $0.assignee == me }, within: .public) { (recordOperationResult, todosINeedToDo) in
-    
-    // syncSummary indicates whether fetching from CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
-
-    // recordOperationResult indicates whether fetching from the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local save failed due to error: \(recordOperationResult.error)")
-    }
-    
-    print("Here are the Todos you still have to do: \(todosINeedToDo)")
-    
-}
-
-```
-
-If you prefer, you can also use `find` with an `NSPredicate` rather than a closure:
-
-```swift
-
-let iAmTheAssigneeAndTodoNotCompleted = NSPredicate(format: "assignee == %@ && completed == false", argumentArray: [me])
-Todo.find(where: iAmTheAssigneeAndTodoNotCompleted, within: .public) { (recordOperationresult, records) in
-    
-    // syncSummary indicates whether fetching from CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
-
-    // recordOperationResult indicates whether fetching from the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local save failed due to error: \(recordOperationResult.error)")
-    }
-    
-    print("Here are the Todos you still have to do: \(todosINeedToDo)")
-    
-}
-
-```
-
-#### Deleting Records
-
-You delete Records by removing them from the appropriate `StorageScope` using Mist's static `remove` function:
-
-```swift
-
-// Todos created as shown above
-let takeOutGarbage = ...
-let walkTheDog = ...
-
-let todos: Set<Todo> = [takeOutGarbage, walkTheDog]
-
-Mist.remove(todos, from: .public) { (recordOperationResult, syncSummary) in
-
-    // recordOperationResult indicates whether saving to the local cache worked
-    guard recordOperationResult.succeeded == true else {
-        fatalError("Local remove failed due to error: \(recordOperationResult.error)")
-    }
-    
-    // syncSummary indicates whether saving to CloudKit worked;
-    // syncSummary is nil by default, but has a value 
-    // if automatic synchronization is enabled
-    if let syncSummary = syncSummary {
-        guard syncSummary.succeeded == true else {
-            fatalError("CloudKit sync failed: \(syncSummary)")
-        }
-    }
-    
-    print("Todos deleted successfully")
-    
-}
-
-```
-
-When deleting a Record, deletes may or may not cascade to related Records. Just like with CloudKit's `CKReference`s, each relationship you create has a corresponding `RelationshipAction` -- either `deleteSelf` or `none` -- which is equivalent to `CKReference`'s `CKReferenceAction`.
+Object-level notifications are identical to what Realm provides, so [check out their explanation](https://realm.io/docs/swift/latest/#object-notifications).
 
 ### Configuration
 
