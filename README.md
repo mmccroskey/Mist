@@ -175,11 +175,7 @@ class TodoList : Record {
     
     // MARK: - Relationships
     
-    // In addition to using LinkingObjects for to-many relationships
-    // as we did in Todo above, you can also use an instance of List,
-    // which has to be updated manually, but which preserves order of insertion.
-    // We'll use that because we want users to be able to reorder their Todos.
-    let todos = List<Todo>()
+    let todos = LinkingObjects(fromType: Todo.self, property: "todoList")
     
 }
 
@@ -251,19 +247,16 @@ let pickUpDryCleaning = Todo()
 pickUpDryCleaning.title = "Pick up dry cleaning"
 pickUpDryCleaning.assignee = me
 pickUpDryCleaning.todoList = errands
-errands.todos.append(pickUpDryCleaning)
 
 let buyStamps = Todo()
 buyStamps.title = "Buy stamps"
 buyStamps.assignee = me
 buyStamps.todoList = errands
-errands.todos.append(buyStamps)
 
 let buyGroceries = Todo()
 buyGroceries.title = "Buy groceries"
 buyGroceries.assignee = me
 buyGroceries.todoList = errands
-errands.todos.append(buyGroceries)
 
 let groceryList = Attachment()
 groceryList.title = "Grocery List"
@@ -305,9 +298,18 @@ See Realm's documentation for more.
 #### Reading Records
 
 ```swift
+
+let privateDb = PrivateDatabase()
+let allTodos = privateDb.objects(Todo.self)
+let incompleteTodos = allTodos.filter("isCompleted == false")
+
 ```
 
 See Realm's documentation for more.
+
+### Getting Notified when Records Change
+
+
 
 ### Mist Databases
 
