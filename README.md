@@ -78,7 +78,48 @@ Coming soon.
 
 ## Usage
 
-With Mist, you define your schema using regular Swift classes. Each Record Type you want to store in your app should have its own subclass of the abstract class `Record`.
+To use Mist, start by configuring your AppDelegate appropriately:
+
+```swift
+
+import UIKit
+import Mist
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        
+	// We don't catch any errors here, but you definitely should!
+	// See [doc section] below for more info
+        try! Mist.setUp()
+	
+    }
+    
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        do {
+	    
+	    // Mist will automatically handle notifications sent by CloudKit
+	    try Mist.handleNotification(withUserInfo: userInfo)
+	    
+	} catch {
+	
+	    // Handle your app's other notifications as appropriate here
+	    
+	}
+        
+    }
+    
+}
+
+```
+
+Next, you'll want to define you app's schema. With Mist, you define your schema using regular Swift classes. Each Record Type you want to store in your app should have its own subclass of the abstract class `Record`.
 
 Because Mist is backed by [Realm](https://realm.io/docs/swift/latest/), your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
 
