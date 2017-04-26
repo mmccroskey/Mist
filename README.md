@@ -78,6 +78,8 @@ Want embedded framework installation support? [Open a pull request](https://gith
 
 ## Usage
 
+### Configure AppDelegate
+
 To use Mist, start by configuring your AppDelegate appropriately:
 
 ```swift
@@ -119,11 +121,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ```
 
+### Define App Schema
+
 Next, you'll want to define you app's schema. With Mist, you define your schema using regular Swift classes. Each Record Type you want to store in your app should have its own subclass of the abstract class `Record`.
 
 Because Mist is backed by [Realm](https://realm.io/docs/swift/latest/), your model classes need to follow all of [Realm's rules for model classes](https://realm.io/docs/swift/latest/#models).
-
-### Example: TinyTask App
 
 Let's say we're building a simple Todo app, which we'll call TinyTask. TinyTask lets Users create Todo Lists & Todos. Todo Lists can be private or be shared with other Users. Todos can be assigned to Users, and can have associated Attachments. Here are the model classes we need to create:
 
@@ -231,7 +233,7 @@ public extension User {
 
 ```
 
-### Creating Records
+### Create Records
 
 Once you've created your `Record` subclasses, you'll want to use them to create some Records. Let's say you're going to run some errands by yourself:
 
@@ -267,7 +269,7 @@ buyGroceries.attachment = groceryList
 
 ```
 
-### Saving & Retrieving Records
+### Save & Retrieve Records
 
 Now let's save these Records. [Just like with CloudKit](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every Record in Mist must be saved in a Database, and there are three types: 
 
@@ -278,7 +280,12 @@ Now let's save these Records. [Just like with CloudKit](https://developer.apple.
 3. Shared
     * If another User shares some of their private Records with the current User, those shared Records appear here.
     
-Much more detail is available in the [Mist's Architecture Explained](#) section below. Each one of these Database Types has a corresponding class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`. All of these inherit from the abstract class `Database`, and all `Database` instances are backed by `Realm` instances, which means that Databases have the same syntax and rules for interaction as Realm instances do. Here's the Cliff Notes:
+Much more detail is available in the [Mist's Architecture Explained](#) section below. Each one of these Database Types has a corresponding class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`. All of these inherit from the abstract class `Database`, and all `Database` instances are backed by `Realm` instances, which means that Databases have the same syntax and rules for interaction as Realm instances do.
+
+This means that:
+
+1. **`Database` instances are thread-locked.**
+    * boop
 
 #### Saving Records
 
@@ -286,28 +293,67 @@ Much more detail is available in the [Mist's Architecture Explained](#) section 
 
 let errands = ... // As created above
 
-let privateDb = PrivateDatabase()
-privateDb.write {
+// We don't catch errors here, but you should!
+// See [README section] for details
+let privateDb = try! PrivateDatabase()
+try! privateDb.write {
     privateDb.add(errands)
 }
 
 ```
 
-See Realm's documentation for more.
+See [Realm's documentation](https://realm.io/docs/swift/latest/#adding-objects) for more.
 
-#### Reading Records
+#### Retrieving Records
 
 ```swift
 
-let privateDb = PrivateDatabase()
+// We don't catch errors here, but you should!
+// See [README section] for details
+let privateDb = try! PrivateDatabase()
 let allTodos = privateDb.objects(Todo.self)
 let incompleteTodos = allTodos.filter("isCompleted == false")
+print("Here are the incomplete Todos: \(incompleteTodos)")
 
 ```
 
-See Realm's documentation for more.
+See [Realm's documentation](https://realm.io/docs/swift/latest/#queries) for more.
 
-### Getting Notified when Records Change
+### Modify Records
+
+Once you've created your list of Errands, you'll want to check them off as you complete them.
+
+```swift
+
+// As created above
+let errands = ...
+let pickUpDryCleaning = ...
+let privateDb = ...
+
+try! privateDb.write {
+    pickUpDryCleaning.isCompleted = true
+}
+
+```
+
+You also realize that your roommate already got stamps, so you don't need that Todo at all:
+
+```swift
+
+// As created above
+let errands = ...
+let buyStamps = ...
+let privateDb = ...
+
+try! privateDb.write {
+    privateDb.delete(buyStamps)
+}
+
+```
+
+Note that **all modifications (including deletion) to a Record must occur inside the write transaction for its Database**.
+
+### Get Notified when Records Change
 
 
 
