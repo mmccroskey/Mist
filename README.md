@@ -235,7 +235,7 @@ public extension User {
 
 ```
 
-### Creating & Saving Records
+### Creating Records
 
 Once you've created your `Record` subclasses, you'll want to use them to create some Records. Let's say you're going to run some errands by yourself:
 
@@ -272,15 +272,42 @@ groceryListTextFile.fileURL = ... // URL to local file on device
 groceryList.asset = groceryListTextFile
 buyGroceries.attachment = groceryList
 
-// Learn more about Databases in [section goes here]
+```
+
+### Saving & Retrieving Records
+
+Now let's save these Records. [Just like with CloudKit](https://developer.apple.com/library/content/documentation/DataManagement/Conceptual/CloudKitQuickStart/Introduction/Introduction.html), every Record in Mist must be saved in a Database, and there are three types: 
+
+1. Public
+    * This is where you store Records you want everyone to be able to see and edit. 
+2. Private
+    * This is where you store Records that you want only the current User to be able to see and edit.
+3. Shared
+    * If another User shares some of their private Records with the current User, those shared Records appear here.
+    
+Much more detail is available in the [Mist's Architecture Explained](#) section below. Each one of these Database Types has a corresponding class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`. All of these inherit from the abstract class `Database`, and all `Database` instances are backed by `Realm` instances, which means that Databases have the same syntax and rules for interaction as Realm instances do. Here's the Cliff Notes:
+
+#### Saving Records
+
+```swift
+
+let errands = ... // As created above
+
 let privateDb = PrivateDatabase()
 privateDb.write {
-    private.add(errands)
+    privateDb.add(errands)
 }
 
 ```
 
+See Realm's documentation for more.
 
+#### Reading Records
+
+```swift
+```
+
+See Realm's documentation for more.
 
 ### Mist Databases
 
