@@ -236,15 +236,17 @@ As described in the [CloudKit documentation](https://developer.apple.com/library
 
 *(Graphic Goes Here)*
 
-The Public Database is therefore accessible to all Users, and all Records in the Public Database can be seen 
+The Public Database is where public data is stored. Every User can see every Record in the Container's single Public Database, and every User has full CRUD (Create, Read, Update, & Delete) access to all the Records in the Public Data.
 
-Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud user at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
+Each User also has their own individual Private Database and Shared Database. In contrast to the Public Database, Private and Shared Databases are only accessible to the User with which they're associated. Only that User can see the Records in that Database at all, and that User has full CRUD access to those Records.
+
+Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud User at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
 Mist reflects this by providing three concrete subclasses of its abstract `Database` class: `PublicDatabase`, `PrivateDatabase`, and `SharedDatabase`.
 
 #### How Mist Stores Data
 
-All Mist operations are performed against its Databases, which are local caches of records backed by Realm. Record are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
+All Mist operations are performed against its Databases, which are local caches of records backed by Realm. Records are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
 
 So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit.
 
@@ -262,7 +264,7 @@ privateDb.write {
 
 ```
 
-First we create a `PrivateDatabase`, and then we `add` our `TodoList` to the Database inside its `write` transaction. Adding the `TodoList` automatically adds the other objects we created, since they're related (directly or indirectly) to that `TodoList`. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of the `Realm` class. This is because **each Database is backed by its own Realm file on disk, and each Database instance is backed by a Realm instance.** 
+First we create a `PrivateDatabase`, and then we `add` our `TodoList` to the Database inside its `write` transaction. Adding the `TodoList` automatically adds the other objects we created, since they're related (directly or indirectly) to that `TodoList`. If you've ever used Realm, you'll undoubtedly notice that this syntax is identical to how you use instances of the `Realm` class. This is because **each Database instance is backed by a Realm instance.** 
 
 This means that all the rules about Realm instances also apply to Database instances. Most importantly, this means that **Databases instances (& all Record instances managed by them) are thread-locked.** Once a Database instance has been created, all subsequent interactions with that Database (and any Record instances you fetched from it or saved to it) must occur on that same thread. This sounds ridiculous at first, but is actually pretty simple to adhere to because of three factors:
 
@@ -272,10 +274,6 @@ This means that all the rules about Realm instances also apply to Database insta
     - So if you're using Records from one instance of a Database, and then another instance updates the DB, your instance will instantly have those latest changes without you having to do another fetch.
 3. You can be notified whenever the data in a Database changes.
     - So if you're using one instance of a Database to drive a UI and another to write Records in the background, just listen for the change notification and reload your UI when data changes.
-
-You use the `add` function whether you're saving new Records, or saving edits to existing Records.
-
-A quick side note: by default, saving a Record saves all the Records linked to it -- that is, the Records with which it has relationships. Therefore, saving the TodoLists in the example above saves all the Todos we created, as well the new User (your husband) and even the Attachment we added to our "Buy groceries" Todo. This default behavior can be overridden via an optional property on the `add` function; see [Advanced Usage](https://github.com/mmccroskey/MistLegacy/blob/master/README.md#advanced-usage) for more info.
 
 #### Fetching Records
 
