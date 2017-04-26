@@ -226,7 +226,12 @@ errands.todos.append(buyGroceries)
 
 ```
 
-Now we need to save these Records. Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in Mist and in CloudKit.
+Now we need to save these Records. As explained in CloudKit's Architecture Documentation [link goes here], each record stored in CloudKit must be stored in one of its Databases. There are three different types of Databases: public, private, and shared. All Users share a single Public Database, whe
+
+
+
+
+Before we do that, though, we need to learn a bit about Mist's Databases, since they're the basis of saving Records, and of all other Record actions. First, a momentary detour into how data storage works in Mist and in CloudKit.
 
 ### Mist Databases
 
@@ -236,9 +241,9 @@ As described in the [CloudKit documentation](https://developer.apple.com/library
 
 *(Graphic Goes Here)*
 
-The Public Database is where public data is stored. Every User can see every Record in the Container's single Public Database, and every User has full CRUD (Create, Read, Update, & Delete) access to all the Records in the Public Data.
+The Public Database is where public data is stored. Every User can see every Record in the Container's single Public Database, and every User has full CRUD (Create, Read, Update, & Delete) access to all the Records in the Public Database.
 
-Each User also has their own individual Private Database and Shared Database. In contrast to the Public Database, Private and Shared Databases are only accessible to the User with which they're associated. Only that User can see the Records in that Database at all, and that User has full CRUD access to those Records.
+Each User also has their own individual Private Database and Shared Database. In contrast to the Public Database, Private and Shared Databases are only accessible to the User with which they're associated. Only that User can see the Records in that Database, and that User has full CRUD access to those Records.
 
 Therefore, all Users share the same Public Database, but each User has her own Private Database and her own Shared Database. And obviously, a particular Device can only be logged in as one iCloud User at any given time. Therefore, any instance of a CloudKit-enabled application running on a particular device will have access to exactly three databases: one public, one private, and one shared.
 
@@ -246,9 +251,9 @@ Mist reflects this by providing three concrete subclasses of its abstract `Datab
 
 #### How Mist Stores Data
 
-All Mist operations are performed against its Databases, which are local caches of records backed by Realm. Records are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
+All Mist operations -- that is, reading and writing data -- are performed against its Databases, which are local caches of records backed by Realm. Records are fetched from the Databases, and saves/deletes are performed on Databases. Separately from these operations, Mist synchronizes the Databases with CloudKit.
 
-So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit.
+So, to save Records, you first need to create an instance of the concrete `Database` subclass that corresponds to where you want those Records to be saved in CloudKit. You then 
 
 ```swift
 
@@ -755,6 +760,10 @@ Synchroniziation is typically a three-step process: pulling down records from th
 ## FAQs
 
 FAQs go here.
+
+## Current Limitations
+
+* No Asset support
 
 ## Open Radars
 
