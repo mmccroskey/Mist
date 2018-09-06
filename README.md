@@ -1,4 +1,4 @@
-# Important Note
+# This repo is no longer maintained
 
 This project is no longer actively maintained, and was never finished. Its README is an aspiration for the end goal of the project rather than an accurate description of its current behavior. I've left it here for posterity and to serve as potential inspiration or raw materials for others who may wish to pursue a similar project.
 
